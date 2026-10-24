@@ -65,7 +65,7 @@
 
     <!-- Header Navigation -->
     <header class="bg-white/90 backdrop-blur-md border-b border-cream-300 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
             <div class="flex justify-between items-center h-16">
                 <!-- Yumara Logo & Title -->
                 <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="app.goHome()">
@@ -104,82 +104,52 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6">
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6">
 
-        <!-- VIEW 1: LANDING PAGE & RECOMMENDATIONS -->
-        <div id="view-landing" class="space-y-12">
+        <!-- VIEW 1: LANDING PAGE -->
+        <div id="view-landing" class="flex flex-col items-center justify-center py-8 text-center max-w-xl mx-auto space-y-6">
+            <div class="w-20 h-20 bg-yumara-100 rounded-3xl flex items-center justify-center text-yumara-600 shadow-inner border border-yumara-200">
+                <svg class="h-10 w-auto fill-current" viewBox="0 0 120 80">
+                    <path d="M 15 52 A 28 28 0 0 1 71 52 Z M 10 55 L 76 55 A 3 3 0 0 1 76 61 L 10 61 A 3 3 0 0 1 10 55 Z" />
+                    <path d="M 83 23 L 83 40 C 83 46 99 46 99 40 L 99 23 L 95 23 L 95 36 L 93 36 L 93 23 L 89 23 L 89 36 L 87 36 L 87 23 Z M 89 44 L 93 44 L 93 68 L 89 68 Z" />
+                    <path d="M 103 23 C 111 23 112 38 111 46 L 103 46 Z M 105 48 L 109 48 L 109 68 L 105 68 Z" />
+                </svg>
+            </div>
             
-            <!-- Hero / Quick Join Section -->
-            <div class="flex flex-col items-center justify-center py-6 text-center max-w-xl mx-auto space-y-6">
-                <div class="w-20 h-20 bg-yumara-100 rounded-3xl flex items-center justify-center text-yumara-600 shadow-inner border border-yumara-200">
-                    <svg class="h-10 w-auto fill-current" viewBox="0 0 120 80">
-                        <path d="M 15 52 A 28 28 0 0 1 71 52 Z M 10 55 L 76 55 A 3 3 0 0 1 76 61 L 10 61 A 3 3 0 0 1 10 55 Z" />
-                        <path d="M 83 23 L 83 40 C 83 46 99 46 99 40 L 99 23 L 95 23 L 95 36 L 93 36 L 93 23 L 89 23 L 89 36 L 87 36 L 87 23 Z M 89 44 L 93 44 L 93 68 L 89 68 Z" />
-                        <path d="M 103 23 C 111 23 112 38 111 46 L 103 46 Z M 105 48 L 109 48 L 109 68 L 105 68 Z" />
-                    </svg>
-                </div>
-                
-                <div>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-forest-800 tracking-tight">What Are We Going to Eat?</h2>
-                    <p class="text-yumara-600 text-xs font-bold uppercase tracking-widest mt-1">Live Group Food Ordering in Egypt • EGP (ج.م)</p>
-                    <p class="text-slate-600 mt-3 text-sm leading-relaxed max-w-md mx-auto">
-                        Real-time collaborative ordering across phones &amp; laptops. Discover legendary Egyptian spots, split delivery fees, and settle through InstaPay or Cash.
-                    </p>
-                </div>
+            <div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-forest-800 tracking-tight">What Are We Going to Eat?</h2>
+                <p class="text-yumara-600 text-xs font-bold uppercase tracking-widest mt-1">Live Multi-User Food Ordering • Powered by Firebase</p>
+                <p class="text-slate-600 mt-3 text-sm leading-relaxed max-w-md mx-auto">
+                    Real-time cloud database sync across everyone’s phones &amp; laptops. Add orders, split delivery &amp; taxes in <strong>EGP (ج.م)</strong>, and track payments seamlessly.
+                </p>
+            </div>
 
-                <!-- Join With Code Box -->
-                <div class="w-full bg-white rounded-2xl p-5 border border-cream-300 shadow-sm space-y-3">
-                    <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider text-left">
-                        Have a 6-Character Session Code?
-                    </label>
-                    <div class="flex gap-2">
-                        <input type="text" id="join-code-input" maxlength="7" placeholder="e.g. YUM482" 
-                               class="code-font uppercase text-center text-lg font-extrabold tracking-widest flex-1 px-4 py-2.5 rounded-xl border border-cream-300 bg-cream-50 text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
-                        <button onclick="app.joinByCode()" class="px-5 py-2.5 bg-forest-800 hover:bg-forest-900 text-white font-bold text-sm rounded-xl transition-colors shadow-sm flex items-center gap-1.5">
-                            <span>Join</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Or Start New Order / History -->
-                <div class="flex flex-col sm:flex-row gap-3 w-full">
-                    <button onclick="app.showCreateSessionModal()" class="flex-1 inline-flex justify-center items-center space-x-2 px-6 py-3.5 text-sm font-bold text-white bg-yumara-600 hover:bg-yumara-700 rounded-xl shadow-lg shadow-yumara-600/20 transition-all transform hover:-translate-y-0.5">
-                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                        <span>Start Custom Group Order</span>
-                    </button>
-                    <button onclick="app.openHistoryModal()" class="inline-flex justify-center items-center space-x-2 px-5 py-3.5 text-sm font-bold text-forest-800 bg-white border border-cream-300 hover:bg-cream-100 rounded-xl shadow-sm transition-all">
-                        <i data-lucide="history" class="w-5 h-5"></i>
-                        <span>Past Sessions</span>
+            <!-- Join With Code Box -->
+            <div class="w-full bg-white rounded-2xl p-5 border border-cream-300 shadow-sm space-y-3">
+                <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider text-left">
+                    Have a 6-Character Session Code?
+                </label>
+                <div class="flex gap-2">
+                    <input type="text" id="join-code-input" maxlength="7" placeholder="e.g. YUM482" 
+                           class="code-font uppercase text-center text-lg font-extrabold tracking-widest flex-1 px-4 py-2.5 rounded-xl border border-cream-300 bg-cream-50 text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
+                    <button onclick="app.joinByCode()" class="px-5 py-2.5 bg-forest-800 hover:bg-forest-900 text-white font-bold text-sm rounded-xl transition-colors shadow-sm flex items-center gap-1.5">
+                        <span>Join</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- EGYPT RESTAURANT RECOMMENDATIONS SECTION -->
-            <section class="border-t border-cream-300 pt-8 space-y-6">
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                    <div>
-                        <div class="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-yumara-100 text-yumara-800 text-[11px] font-extrabold mb-1.5 border border-yumara-200">
-                            <span>🇪🇬 Popular in Egypt</span>
-                            <span class="w-1 h-1 rounded-full bg-yumara-600"></span>
-                            <span>Office &amp; Gathering Favorites</span>
-                        </div>
-                        <h3 class="text-2xl font-black text-forest-800 tracking-tight">Need Food Inspiration? Order from Egypt’s Best</h3>
-                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Pick a restaurant below to instantly launch a live room with pre-loaded menu presets and delivery estimates.</p>
-                    </div>
-
-                    <!-- Category Pills -->
-                    <div id="category-filters-container" class="flex flex-wrap gap-1.5">
-                        <!-- Populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Restaurants Card Grid -->
-                <div id="restaurants-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    <!-- Populated dynamically by renderRecommendations() -->
-                </div>
-            </section>
-
+            <!-- Or Start New Order -->
+            <div class="flex flex-col sm:flex-row gap-3 w-full">
+                <button onclick="app.showCreateSessionModal()" class="flex-1 inline-flex justify-center items-center space-x-2 px-6 py-3.5 text-sm font-bold text-white bg-yumara-600 hover:bg-yumara-700 rounded-xl shadow-lg shadow-yumara-600/20 transition-all transform hover:-translate-y-0.5">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    <span>Start New Group Order</span>
+                </button>
+                <button onclick="app.openHistoryModal()" class="inline-flex justify-center items-center space-x-2 px-5 py-3.5 text-sm font-bold text-forest-800 bg-white border border-cream-300 hover:bg-cream-100 rounded-xl shadow-sm transition-all">
+                    <i data-lucide="history" class="w-5 h-5"></i>
+                    <span>Past Sessions</span>
+                </button>
+            </div>
         </div>
 
         <!-- VIEW 2: UNIFIED COLLABORATIVE BOARD -->
@@ -209,8 +179,8 @@
                             </button>
                         </div>
 
-                        <h2 id="session-restaurant-name" class="text-2xl font-extrabold text-forest-800 tracking-tight pt-1">Restaurant Name</h2>
-                        <p id="session-organizer-info" class="text-xs text-slate-500">Organized by Organizer</p>
+                        <h2 id="session-restaurant-name" class="text-2xl sm:text-3xl font-extrabold text-forest-800 tracking-tight pt-1">Restaurant Name</h2>
+                        <p id="session-organizer-info" class="text-xs sm:text-sm text-slate-500">Organized by Organizer</p>
                     </div>
 
                     <!-- Action Buttons -->
@@ -231,84 +201,84 @@
                 </div>
             </div>
 
-            <!-- Grid: Left = Add/Edit Form & Order Board, Right = Bill & Admin Controls -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-                <!-- Main Col (col-span-7) -->
-                <div class="lg:col-span-7 space-y-6">
-
-                    <!-- QUICK ORDER INPUT FORM -->
-                    <div class="bg-white rounded-2xl p-5 border border-cream-300 shadow-sm space-y-4">
-                        <div class="flex items-center justify-between border-b border-cream-200 pb-3">
-                            <div class="flex items-center space-x-2">
-                                <i data-lucide="utensils" class="w-4 h-4 text-yumara-600"></i>
-                                <h3 id="order-form-header-title" class="font-bold text-forest-800 text-sm sm:text-base">Add or Update Your Order</h3>
-                            </div>
-                            <span id="order-form-badge" class="hidden px-2 py-0.5 rounded text-[11px] font-bold bg-yumara-100 text-yumara-800 border border-yumara-200">
-                                Editing Existing
-                            </span>
+            <!-- PROMINENT ORDER FORM: Placed right below the restaurant headline banner & enlarged -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-cream-300 shadow-md ring-1 ring-yumara-600/10 space-y-6">
+                <div class="flex items-center justify-between border-b border-cream-200 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-yumara-100 text-yumara-700 flex items-center justify-center border border-yumara-200">
+                            <i data-lucide="utensils" class="w-5 h-5"></i>
                         </div>
-
-                        <!-- 1. Name & Payment Method -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Your Name *</label>
-                                <input type="text" id="order-input-name" placeholder="e.g. Ahmed, Sarah, Omar..." oninput="app.handleNameInputCheck()" 
-                                       class="w-full text-xs sm:text-sm px-3 py-2 rounded-xl border border-cream-300 bg-cream-50 font-semibold text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Payment Method *</label>
-                                <div class="grid grid-cols-2 gap-1.5">
-                                    <button type="button" id="pay-choice-instapay" onclick="app.setOrderPaymentMethod('InstaPay')" class="py-2 px-2 text-xs font-bold rounded-xl border border-yumara-600 bg-yumara-50 text-yumara-800 flex items-center justify-center space-x-1">
-                                        <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
-                                        <span>InstaPay</span>
-                                    </button>
-                                    <button type="button" id="pay-choice-cash" onclick="app.setOrderPaymentMethod('Cash')" class="py-2 px-2 text-xs font-bold rounded-xl border border-cream-300 bg-cream-100 text-forest-800 flex items-center justify-center space-x-1">
-                                        <i data-lucide="banknote" class="w-3.5 h-3.5"></i>
-                                        <span>Cash</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Menu Quick Presets (Interactive 1-Click addition) -->
-                        <div id="board-presets-wrapper" class="hidden space-y-1.5 pt-1">
-                            <div class="flex items-center justify-between">
-                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">Quick Egyptian Menu Presets (Tap to add)</label>
-                                <span class="text-[10px] text-yumara-600 font-semibold">Click dish to add instantly</span>
-                            </div>
-                            <div id="board-presets-list" class="flex flex-wrap gap-1.5"></div>
-                        </div>
-
-                        <!-- 2. Items List -->
-                        <div class="space-y-2 pt-2 border-t border-cream-200">
-                            <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider">Food Items &amp; Prices (EGP / ج.م)</label>
-                            <div id="board-items-inputs" class="space-y-2"></div>
-
-                            <button type="button" onclick="app.addBoardItemRow()" class="w-full py-2 px-3 border border-dashed border-yumara-300 hover:border-yumara-600 hover:bg-yumara-50 text-yumara-700 text-xs font-bold rounded-xl flex items-center justify-center space-x-1.5 transition-all">
-                                <i data-lucide="plus" class="w-4 h-4"></i>
-                                <span>Add Another Custom Item</span>
-                            </button>
-                        </div>
-
-                        <!-- 3. Notes -->
                         <div>
-                            <input type="text" id="order-input-note" placeholder="Special note (e.g. no onions, extra tahina, well done)..." class="w-full text-xs px-3 py-2 rounded-xl border border-cream-300 bg-cream-50 font-medium text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
+                            <h3 id="order-form-header-title" class="font-extrabold text-forest-800 text-xl sm:text-2xl tracking-tight">Add or Update Your Order</h3>
+                            <p class="text-xs sm:text-sm text-slate-500">Pick your dishes, add customizations, and submit straight to the live group board.</p>
                         </div>
+                    </div>
+                    <span id="order-form-badge" class="hidden px-3 py-1 rounded-lg text-xs font-bold bg-yumara-100 text-yumara-800 border border-yumara-200">
+                        Editing Existing
+                    </span>
+                </div>
 
-                        <!-- Submit Order Button -->
-                        <div class="flex gap-2 pt-1">
-                            <button id="btn-submit-order" onclick="app.submitColleagueOrder()" class="flex-1 py-2.5 bg-yumara-600 hover:bg-yumara-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-yumara-600/20 transition-all flex items-center justify-center space-x-2">
-                                <i data-lucide="check-circle" class="w-4 h-4"></i>
-                                <span id="btn-submit-order-text">Add My Order to Board</span>
+                <!-- 1. Name & Payment Method -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs sm:text-sm font-extrabold text-forest-800 uppercase tracking-wider mb-2">Your Name *</label>
+                        <input type="text" id="order-input-name" placeholder="e.g. Ahmed, Sarah..." oninput="app.handleNameInputCheck()" 
+                               class="w-full text-sm sm:text-base px-4 py-3 rounded-2xl border border-cream-300 bg-cream-50 font-semibold text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/25 focus:border-yumara-600 shadow-inner">
+                    </div>
+                    <div>
+                        <label class="block text-xs sm:text-sm font-extrabold text-forest-800 uppercase tracking-wider mb-2">Payment Method *</label>
+                        <div class="grid grid-cols-2 gap-2 h-[50px]">
+                            <button type="button" id="pay-choice-instapay" onclick="app.setOrderPaymentMethod('InstaPay')" class="h-full px-3 text-xs sm:text-sm font-bold rounded-2xl border border-yumara-600 bg-yumara-50 text-yumara-800 flex items-center justify-center space-x-2 transition-all">
+                                <i data-lucide="smartphone" class="w-4 h-4"></i>
+                                <span>InstaPay</span>
                             </button>
-                            <button id="btn-cancel-edit" onclick="app.resetOrderForm()" class="hidden px-4 py-2.5 text-xs font-bold text-slate-500 hover:bg-cream-100 border border-cream-300 rounded-xl">
-                                Cancel
+                            <button type="button" id="pay-choice-cash" onclick="app.setOrderPaymentMethod('Cash')" class="h-full px-3 text-xs sm:text-sm font-bold rounded-2xl border border-cream-300 bg-cream-100 text-forest-800 flex items-center justify-center space-x-2 transition-all">
+                                <i data-lucide="banknote" class="w-4 h-4"></i>
+                                <span>Cash</span>
                             </button>
                         </div>
                     </div>
+                </div>
 
-                    <!-- UNIVERSAL SHARED ORDERS BOARD -->
+                <!-- Menu Quick Presets -->
+                <div id="board-presets-wrapper" class="hidden space-y-2 pt-1">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Quick Select Presets</label>
+                    <div id="board-presets-list" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <!-- 2. Items List -->
+                <div class="space-y-3 pt-4 border-t border-cream-200">
+                    <label class="block text-xs sm:text-sm font-extrabold text-forest-800 uppercase tracking-wider">Food Items &amp; Prices (EGP)</label>
+                    <div id="board-items-inputs" class="space-y-2.5"></div>
+
+                    <button type="button" onclick="app.addBoardItemRow()" class="w-full py-3 px-4 border-2 border-dashed border-yumara-300 hover:border-yumara-600 hover:bg-yumara-50 text-yumara-700 text-xs sm:text-sm font-bold rounded-2xl flex items-center justify-center space-x-2 transition-all">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Add Another Item</span>
+                    </button>
+                </div>
+
+                <!-- 3. Notes -->
+                <div>
+                    <input type="text" id="order-input-note" placeholder="Special note (e.g. no onions, extra spicy, separate bag)..." class="w-full text-xs sm:text-sm px-4 py-3 rounded-2xl border border-cream-300 bg-cream-50 font-medium text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/25 focus:border-yumara-600">
+                </div>
+
+                <!-- Submit Order Button -->
+                <div class="flex gap-3 pt-2">
+                    <button id="btn-submit-order" onclick="app.submitColleagueOrder()" class="flex-1 py-3.5 bg-yumara-600 hover:bg-yumara-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-lg shadow-yumara-600/25 transition-all flex items-center justify-center space-x-2 transform hover:-translate-y-0.5">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i>
+                        <span id="btn-submit-order-text">Add My Order to Board</span>
+                    </button>
+                    <button id="btn-cancel-edit" onclick="app.resetOrderForm()" class="hidden px-6 py-3.5 text-xs sm:text-sm font-bold text-slate-500 hover:bg-cream-100 border border-cream-300 rounded-2xl">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lower Grid: Left = All Colleagues' Orders, Right = Bill & Admin Controls -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Main Col: Orders Board (col-span-7) -->
+                <div class="lg:col-span-7 space-y-6">
                     <div class="bg-white rounded-2xl p-5 border border-cream-300 shadow-sm space-y-4">
                         <div class="flex items-center justify-between border-b border-cream-200 pb-3">
                             <div class="flex items-center space-x-2">
@@ -323,7 +293,6 @@
                         <!-- Orders Stream -->
                         <div id="board-orders-list" class="space-y-4 divide-y divide-cream-200"></div>
                     </div>
-
                 </div>
 
                 <!-- Right Col: Calculations & Admin Panel (col-span-5) -->
@@ -450,8 +419,6 @@
                     </div>
                 </div>
 
-                <input type="hidden" id="create-prefill-presets" value="">
-
                 <div class="pt-3 flex justify-end space-x-2">
                     <button type="button" onclick="app.closeModal('modal-create-session')" class="px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-cream-100 rounded-xl">Cancel</button>
                     <button type="submit" id="btn-submit-create" class="px-5 py-2.5 text-xs font-bold text-white bg-yumara-600 hover:bg-yumara-700 rounded-xl shadow-md shadow-yumara-600/20 flex items-center space-x-2">
@@ -551,200 +518,6 @@
         const auth = getAuth(firebaseApp);
         const db = getFirestore(firebaseApp);
 
-        // Curated Top Restaurants in Egypt with Authentic Presets & Pricing (EGP)
-        const EGYPT_RESTAURANTS = [
-            {
-                id: 'kebdet-elprince',
-                name: 'Kebdet El Prince (البرنس)',
-                category: 'authentic',
-                cuisine: 'Egyptian & Grilled Meats',
-                rating: 4.8,
-                reviews: '12.4k',
-                priceLevel: '₺₺',
-                avgPrice: '120 - 250 EGP',
-                areas: 'Imbaba • Cairo Delivery',
-                deliveryFee: 35,
-                menuUrl: 'https://www.elmenus.com/cairo/restaurants/kebdet-el-prince-imbaba',
-                highlights: ['Alexandrian Liver', 'Mombar', 'Molokhia Tagine', 'Stuffed Pigeon'],
-                presets: [
-                    { name: 'Alexandrian Liver (Kebda Eskandarani)', price: 125 },
-                    { name: 'Hawawshi Baladi Extra', price: 90 },
-                    { name: 'Molokhia Tagine with Plain Rice', price: 95 },
-                    { name: 'Mombar Plate (6 pcs)', price: 110 },
-                    { name: 'Meat Tagine with Onions', price: 195 },
-                    { name: 'Arugula & Tahina Salad Pack', price: 25 }
-                ]
-            },
-            {
-                id: 'zooba',
-                name: 'Zooba (زوبة)',
-                category: 'street',
-                cuisine: 'Gourmet Street Food & Falafel',
-                rating: 4.7,
-                reviews: '9.8k',
-                priceLevel: '₺₺',
-                avgPrice: '60 - 160 EGP',
-                areas: 'Zamalek • Maadi • New Cairo',
-                deliveryFee: 25,
-                menuUrl: 'https://zoobaeats.com',
-                highlights: ['Beetroot Hibiscus Taameya', 'Spicy Shakshouka', 'Grain Koshary'],
-                presets: [
-                    { name: 'Stuffed Taameya with Spicy Harissa', price: 38 },
-                    { name: 'Foul with Whole Grain Tahina', price: 42 },
-                    { name: 'Beef Sausage Hawawshi', price: 98 },
-                    { name: 'Signature Whole Grain Koshary', price: 75 },
-                    { name: 'Sweet Potato Fries with Dukkah', price: 45 },
-                    { name: 'Hibiscus Iced Lemonade', price: 35 }
-                ]
-            },
-            {
-                id: 'abou-tarek',
-                name: 'Koshary Abou Tarek (أبو طارق)',
-                category: 'authentic',
-                cuisine: 'World Famous Koshary',
-                rating: 4.9,
-                reviews: '24.1k',
-                priceLevel: '₺',
-                avgPrice: '35 - 90 EGP',
-                areas: 'Downtown • Greater Cairo',
-                deliveryFee: 20,
-                menuUrl: 'https://aboutarek.com',
-                highlights: ['Special Koshary Abou Tarek', 'Extra Crispy Fried Onions', 'Rice Pudding'],
-                presets: [
-                    { name: 'Koshary Abou Tarek Special Box', price: 55 },
-                    { name: 'Koshary Mega Star Box', price: 80 },
-                    { name: 'Extra Da’ah & Chili Salsa', price: 10 },
-                    { name: 'Extra Crispy Onions Bowl', price: 15 },
-                    { name: 'Roz Bel Laban (Egyptian Rice Pudding)', price: 30 }
-                ]
-            },
-            {
-                id: 'abou-el-sid',
-                name: 'Abou El Sid (أبو السيد)',
-                category: 'authentic',
-                cuisine: 'Traditional Egyptian Feasts',
-                rating: 4.6,
-                reviews: '6.5k',
-                priceLevel: '₺₺₺',
-                avgPrice: '200 - 450 EGP',
-                areas: 'Zamalek • Heliopolis • 6th October',
-                deliveryFee: 40,
-                menuUrl: 'https://www.elmenus.com/cairo/restaurants/abou-el-sid-zamalek',
-                highlights: ['Hamam Mahshi', 'Veal Shank Fatta', 'Moussaka'],
-                presets: [
-                    { name: 'Stuffed Pigeon (Hamam Mahshi)', price: 240 },
-                    { name: 'Egyptian Garlic & Vinegar Fatta with Veal', price: 295 },
-                    { name: 'Molokhia with Roasted Rabbit / Chicken', price: 230 },
-                    { name: 'Moussaka with Minced Beef', price: 170 },
-                    { name: 'Om Ali with Mixed Pistachios', price: 85 }
-                ]
-            },
-            {
-                id: 'buffalo-burger',
-                name: 'Buffalo Burger (بافلو برجر)',
-                category: 'burgers',
-                cuisine: 'Gourmet Smashed Burgers',
-                rating: 4.7,
-                reviews: '18.2k',
-                priceLevel: '₺₺',
-                avgPrice: '140 - 280 EGP',
-                areas: 'All Cairo & Giza • Alexandria',
-                deliveryFee: 30,
-                menuUrl: 'https://buffaloburger.com',
-                highlights: ['Shiitake Mushroom Burger', 'Hitchhiker', 'Rastafari Chicken'],
-                presets: [
-                    { name: 'Shiitake Mushroom Beef Burger (200g)', price: 195 },
-                    { name: 'Hitchhiker Double Beef Burger', price: 220 },
-                    { name: 'Secret Weapon Crisp Chicken Combo', price: 180 },
-                    { name: 'Curly Fries with Cheddar Sauce', price: 65 },
-                    { name: 'Buffalo Wings (6 pcs BBQ)', price: 95 }
-                ]
-            },
-            {
-                id: 'kazaz',
-                name: 'Kazaz (قزاز)',
-                category: 'street',
-                cuisine: 'Shawarma & Egyptian Breakfast',
-                rating: 4.7,
-                reviews: '15.3k',
-                priceLevel: '₺',
-                avgPrice: '40 - 130 EGP',
-                areas: 'Downtown • Sabri Abou Alam • Dokki',
-                deliveryFee: 20,
-                menuUrl: 'https://www.elmenus.com/cairo/restaurants/kazaz-downtown',
-                highlights: ['Kaiser Meat Shawarma', 'Crisp Broasted Chicken', 'Pastrami Taameya'],
-                presets: [
-                    { name: 'Egyptian Kaiser Beef Shawarma (Large)', price: 65 },
-                    { name: 'Syrian Bread Chicken Shawarma Wrap', price: 85 },
-                    { name: 'Foul with Alexandrian Sausage (Sogok)', price: 40 },
-                    { name: 'Omelette with Pastrami Kaiser', price: 38 },
-                    { name: 'Crispy Golden Fries with Spices', price: 25 }
-                ]
-            },
-            {
-                id: 'el-dahan',
-                name: 'El Dahan (الدهان)',
-                category: 'grilled',
-                cuisine: 'Charcoal Kebab & Kofta',
-                rating: 4.8,
-                reviews: '14.0k',
-                priceLevel: '₺₺₺',
-                avgPrice: '180 - 400 EGP',
-                areas: 'Nasr City • New Cairo • Mohandessin',
-                deliveryFee: 35,
-                menuUrl: 'https://eldahan.com',
-                highlights: ['Kandad Kebab', 'Baladi Kofta', 'Mix Grill Plate'],
-                presets: [
-                    { name: '1/4 Kg Charcoal Baladi Kofta Plate', price: 185 },
-                    { name: '1/4 Kg Mixed Kebab & Tarb', price: 240 },
-                    { name: 'Grilled Half Boneless Chicken Plate', price: 160 },
-                    { name: 'Basmati Rice with Nuts', price: 60 },
-                    { name: 'Assorted Mahshi Box (Vine leaves & Cabbage)', price: 90 }
-                ]
-            },
-            {
-                id: 'el-domiati',
-                name: 'El Domiati (الدمياطي)',
-                category: 'breakfast',
-                cuisine: 'Classic Egyptian Foul & Falafel',
-                rating: 4.6,
-                reviews: '11.0k',
-                priceLevel: '₺',
-                avgPrice: '25 - 75 EGP',
-                areas: 'Mohandessin • Dokki • Giza',
-                deliveryFee: 20,
-                menuUrl: 'https://www.elmenus.com/cairo/restaurants/el-domyati-dokki',
-                highlights: ['Zayt Har Foul', 'Stuffed Kiri Taameya', 'Fried Eggplant'],
-                presets: [
-                    { name: 'Foul with Flaxseed Oil (Zayt Har)', price: 25 },
-                    { name: 'Taameya Stuffed with Kiri Cheese', price: 22 },
-                    { name: 'Egyptian Fried Aubergine with Garlic Salsa', price: 24 },
-                    { name: 'Mashed Potatoes Baladi Bread Sandwich', price: 20 },
-                    { name: 'Pickled Lemon & Green Pepper Pack', price: 12 }
-                ]
-            },
-            {
-                id: 'semsoma',
-                name: 'Semsoma (سمسمة)',
-                category: 'street',
-                cuisine: 'Famous Petit Pain Shawarma',
-                rating: 4.8,
-                reviews: '13.7k',
-                priceLevel: '₺₺',
-                avgPrice: '60 - 150 EGP',
-                areas: 'Dokki • Mohandessin',
-                deliveryFee: 25,
-                menuUrl: 'https://www.elmenus.com/cairo/restaurants/semsoma-dokki',
-                highlights: ['Mini Beef Shawarma Kaiser', 'Garlic Dip Fries', 'Sogok Petit'],
-                presets: [
-                    { name: 'Signature Beef Shawarma Kaiser (Small)', price: 38 },
-                    { name: 'Signature Beef Shawarma (Large)', price: 68 },
-                    { name: 'Sogok Sandwiches Pack (3 Pcs)', price: 110 },
-                    { name: 'Pickled Turnips & Green Tahina Dip', price: 15 }
-                ]
-            }
-        ];
-
         class FoodOrderApp {
             constructor() {
                 this.sessionCode = null;
@@ -752,7 +525,6 @@
                 this.currentEditingParticipantId = null;
                 this.firestoreUnsubscribe = null;
                 this.user = null;
-                this.activeCategory = 'all';
 
                 this.sessionData = {
                     sessionCode: '',
@@ -774,7 +546,6 @@
                 window.addEventListener('hashchange', () => this.handleRouting());
                 
                 document.addEventListener('DOMContentLoaded', () => {
-                    this.renderRecommendations();
                     lucide.createIcons();
                     this.handleRouting();
                 });
@@ -811,7 +582,9 @@
                     this.firestoreUnsubscribe = null;
                 }
 
-                if (!this.user) return;
+                if (!this.user) {
+                    return;
+                }
 
                 const docRef = this.getFirestoreSessionDoc(code);
                 this.firestoreUnsubscribe = onSnapshot(docRef, (docSnap) => {
@@ -882,135 +655,6 @@
                 window.location.hash = `#session=${input}`;
             }
 
-            // ==========================================
-            // RESTAURANTS RECOMMENDATION ENGINE
-            // ==========================================
-
-            renderRecommendations() {
-                const filterContainer = document.getElementById('category-filters-container');
-                const gridContainer = document.getElementById('restaurants-grid');
-                if (!filterContainer || !gridContainer) return;
-
-                const categories = [
-                    { id: 'all', label: 'All Places' },
-                    { id: 'authentic', label: 'Classic Egyptian' },
-                    { id: 'street', label: 'Street Food & Shawarma' },
-                    { id: 'grilled', label: 'Kebab & Grills' },
-                    { id: 'burgers', label: 'Burgers' },
-                    { id: 'breakfast', label: 'Foul & Breakfast' }
-                ];
-
-                filterContainer.innerHTML = categories.map(cat => {
-                    const isActive = this.activeCategory === cat.id;
-                    const btnClass = isActive 
-                        ? 'bg-yumara-600 text-white font-bold border-yumara-600 shadow-sm'
-                        : 'bg-white text-forest-800 border-cream-300 hover:bg-cream-100 font-semibold';
-
-                    return `
-                        <button type="button" onclick="app.setRecommendationCategory('${cat.id}')" 
-                                class="px-3 py-1.5 rounded-xl text-xs border transition-colors ${btnClass}">
-                            ${cat.label}
-                        </button>
-                    `;
-                }).join('');
-
-                const filtered = this.activeCategory === 'all'
-                    ? EGYPT_RESTAURANTS
-                    : EGYPT_RESTAURANTS.filter(r => r.category === this.activeCategory);
-
-                gridContainer.innerHTML = filtered.map(r => `
-                    <div class="bg-white rounded-2xl p-5 border border-cream-300 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden group">
-                        <div class="space-y-3">
-                            <div class="flex items-start justify-between gap-2">
-                                <div>
-                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wide bg-yumara-100 text-yumara-800 border border-yumara-200">
-                                        ${r.cuisine}
-                                    </span>
-                                    <h4 class="font-extrabold text-forest-800 text-base sm:text-lg mt-1 tracking-tight group-hover:text-yumara-700 transition-colors">
-                                        ${r.name}
-                                    </h4>
-                                </div>
-                                <div class="flex items-center space-x-1 bg-amber-50 text-amber-900 border border-amber-200 px-2 py-1 rounded-lg text-xs font-black">
-                                    <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400 text-amber-500"></i>
-                                    <span>${r.rating}</span>
-                                </div>
-                            </div>
-
-                            <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
-                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-yumara-600 shrink-0"></i>
-                                <span class="truncate">${r.areas}</span>
-                            </p>
-
-                            <!-- Highlights -->
-                            <div class="pt-1">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Famous For:</span>
-                                <div class="flex flex-wrap gap-1">
-                                    ${r.highlights.map(h => `
-                                        <span class="text-[11px] font-medium bg-cream-100 text-forest-800 px-2 py-0.5 rounded-md border border-cream-200">
-                                            ${h}
-                                        </span>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Footer with Info & Quick Start Button -->
-                        <div class="pt-4 mt-4 border-t border-cream-200 space-y-3">
-                            <div class="flex justify-between items-center text-xs">
-                                <div>
-                                    <span class="text-slate-400 block text-[10px] font-semibold">Avg. Price / Person</span>
-                                    <span class="font-extrabold text-forest-800">${r.avgPrice}</span>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-slate-400 block text-[10px] font-semibold">Est. Delivery</span>
-                                    <span class="font-bold text-yumara-700">~${r.deliveryFee} EGP</span>
-                                </div>
-                            </div>
-
-                            <div class="flex gap-2">
-                                <button onclick="app.startOrderFromRecommendation('${r.id}')" class="flex-1 py-2 px-3 bg-yumara-600 hover:bg-yumara-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center space-x-1.5">
-                                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                                    <span>Order From Here</span>
-                                </button>
-                                ${r.menuUrl ? `
-                                    <a href="${r.menuUrl}" target="_blank" rel="noopener noreferrer" class="p-2 bg-cream-100 hover:bg-cream-200 text-forest-800 border border-cream-300 rounded-xl flex items-center justify-center transition-colors" title="View official menu">
-                                        <i data-lucide="external-link" class="w-4 h-4"></i>
-                                    </a>
-                                ` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-
-                lucide.createIcons();
-            }
-
-            setRecommendationCategory(catId) {
-                this.activeCategory = catId;
-                this.renderRecommendations();
-            }
-
-            startOrderFromRecommendation(restId) {
-                const rest = EGYPT_RESTAURANTS.find(item => item.id === restId);
-                if (!rest) return;
-
-                // Prefill Create Modal with Egyptian restaurant specifics & presets
-                document.getElementById('create-restaurant-name').value = rest.name;
-                document.getElementById('create-delivery-fee').value = rest.deliveryFee || 25;
-                document.getElementById('create-service-fee').value = 0;
-                document.getElementById('create-menu-url').value = rest.menuUrl || '';
-                
-                // Store serialized presets in hidden input
-                document.getElementById('create-prefill-presets').value = JSON.stringify(rest.presets || []);
-
-                this.showCreateSessionModal();
-                this.showToast(`Selected ${rest.name}! Enter your name to launch.`, 'info');
-            }
-
-            // ==========================================
-            // SESSION CREATION & SYNC
-            // ==========================================
-
             async handleCreateSession(event) {
                 if (event) event.preventDefault();
                 
@@ -1026,14 +670,6 @@
                     const menuUrl = document.getElementById('create-menu-url').value.trim();
                     const deliveryFee = parseFloat(document.getElementById('create-delivery-fee').value) || 0;
                     const serviceFee = parseFloat(document.getElementById('create-service-fee').value) || 0;
-                    
-                    let initialPresets = [];
-                    const prefilledPresetsStr = document.getElementById('create-prefill-presets').value;
-                    if (prefilledPresetsStr) {
-                        try {
-                            initialPresets = JSON.parse(prefilledPresetsStr);
-                        } catch (e) {}
-                    }
 
                     this.sessionCode = this.generateShortCode();
 
@@ -1049,15 +685,12 @@
                         splitMethod: 'equal',
                         isLocked: false,
                         createdAt: new Date().toISOString(),
-                        presets: initialPresets,
+                        presets: [],
                         participants: []
                     };
 
                     this.saveSessionToLocalArchive(true);
                     await this.saveSessionDataToFirestore();
-
-                    // Clear prefilled hidden field
-                    document.getElementById('create-prefill-presets').value = '';
 
                     this.closeModal('modal-create-session');
                     window.location.hash = `#session=${this.sessionCode}`;
@@ -1138,7 +771,6 @@
             showLandingView() {
                 document.getElementById('view-landing').classList.remove('hidden');
                 document.getElementById('view-session').classList.add('hidden');
-                this.renderRecommendations();
             }
 
             computeBreakdowns() {
@@ -1271,28 +903,13 @@
 
                 wrapper.classList.remove('hidden');
                 list.innerHTML = presets.map(p => `
-                    <button type="button" onclick="app.addPresetToActiveInputs('${this.escapeHtml(p.name)}', ${p.price})" class="px-2.5 py-1 bg-cream-200 hover:bg-cream-300 text-forest-800 border border-cream-300 rounded-lg text-xs font-bold flex items-center space-x-1 transition-colors">
+                    <button type="button" onclick="app.addBoardItemRow('${this.escapeHtml(p.name)}', ${p.price})" class="px-3 py-1.5 bg-cream-200 hover:bg-cream-300 text-forest-800 border border-cream-300 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-colors">
                         <span>${this.escapeHtml(p.name)}</span>
                         <span class="text-yumara-700 font-extrabold">(${p.price} EGP)</span>
-                        <i data-lucide="plus" class="w-3 h-3 text-yumara-600"></i>
+                        <i data-lucide="plus" class="w-3.5 h-3.5 text-yumara-600"></i>
                     </button>
                 `).join('');
                 lucide.createIcons();
-            }
-
-            addPresetToActiveInputs(name, price) {
-                // If the first row is empty, fill it. Otherwise add new row.
-                const firstRow = document.querySelector('#board-items-inputs > div');
-                if (firstRow) {
-                    const nameInp = firstRow.querySelector('.item-name-input');
-                    const priceInp = firstRow.querySelector('.item-price-input');
-                    if (nameInp && !nameInp.value.trim() && (!priceInp.value || priceInp.value == 0)) {
-                        nameInp.value = name;
-                        priceInp.value = price;
-                        return;
-                    }
-                }
-                this.addBoardItemRow(name, price, 1);
             }
 
             renderOrdersStream() {
@@ -1367,11 +984,11 @@
                 const cashBtn = document.getElementById('pay-choice-cash');
 
                 if (method === 'Cash') {
-                    cashBtn.className = 'py-2 px-2 text-xs font-bold rounded-xl border border-yumara-600 bg-yumara-50 text-yumara-800 flex items-center justify-center space-x-1';
-                    instaBtn.className = 'py-2 px-2 text-xs font-bold rounded-xl border border-cream-300 bg-cream-100 text-forest-800 flex items-center justify-center space-x-1';
+                    cashBtn.className = 'h-full px-3 text-xs sm:text-sm font-bold rounded-2xl border border-yumara-600 bg-yumara-50 text-yumara-800 flex items-center justify-center space-x-2 transition-all';
+                    instaBtn.className = 'h-full px-3 text-xs sm:text-sm font-bold rounded-2xl border border-cream-300 bg-cream-100 text-forest-800 flex items-center justify-center space-x-2 transition-all';
                 } else {
-                    instaBtn.className = 'py-2 px-2 text-xs font-bold rounded-xl border border-yumara-600 bg-yumara-50 text-yumara-800 flex items-center justify-center space-x-1';
-                    cashBtn.className = 'py-2 px-2 text-xs font-bold rounded-xl border border-cream-300 bg-cream-100 text-forest-800 flex items-center justify-center space-x-1';
+                    instaBtn.className = 'h-full px-3 text-xs sm:text-sm font-bold rounded-2xl border border-yumara-600 bg-yumara-50 text-yumara-800 flex items-center justify-center space-x-2 transition-all';
+                    cashBtn.className = 'h-full px-3 text-xs sm:text-sm font-bold rounded-2xl border border-cream-300 bg-cream-100 text-forest-800 flex items-center justify-center space-x-2 transition-all';
                 }
             }
 
@@ -1381,15 +998,15 @@
 
                 const row = document.createElement('div');
                 row.id = rowId;
-                row.className = 'flex items-center space-x-2 bg-cream-50 p-2 rounded-xl border border-cream-300';
+                row.className = 'flex items-center space-x-2 bg-cream-50 p-2 sm:p-2.5 rounded-2xl border border-cream-300';
                 row.innerHTML = `
-                    <input type="text" placeholder="Food item name" value="${this.escapeHtml(name)}" class="item-name-input flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-cream-300 bg-white font-medium text-forest-800 focus:outline-none focus:ring-1 focus:ring-yumara-500">
-                    <input type="number" placeholder="Price" min="0" step="0.5" value="${price}" class="item-price-input w-20 text-xs px-2.5 py-1.5 rounded-lg border border-cream-300 bg-white font-bold text-forest-800 focus:outline-none focus:ring-1 focus:ring-yumara-500">
+                    <input type="text" placeholder="Food item name" value="${this.escapeHtml(name)}" class="item-name-input flex-1 text-xs sm:text-sm px-3 py-2 rounded-xl border border-cream-300 bg-white font-medium text-forest-800 focus:outline-none focus:ring-1 focus:ring-yumara-500">
+                    <input type="number" placeholder="Price" min="0" step="0.5" value="${price}" class="item-price-input w-24 text-xs sm:text-sm px-3 py-2 rounded-xl border border-cream-300 bg-white font-bold text-forest-800 focus:outline-none focus:ring-1 focus:ring-yumara-500">
                     <div class="flex items-center space-x-1">
-                        <span class="text-[10px] text-slate-400 font-bold">x</span>
-                        <input type="number" min="1" value="${qty}" class="item-qty-input w-12 text-xs px-2 py-1.5 rounded-lg border border-cream-300 bg-white text-center font-bold text-forest-800 focus:outline-none focus:ring-1 focus:ring-yumara-500">
+                        <span class="text-xs text-slate-400 font-bold">x</span>
+                        <input type="number" min="1" value="${qty}" class="item-qty-input w-14 text-xs sm:text-sm px-2 py-2 rounded-xl border border-cream-300 bg-white text-center font-bold text-forest-800 focus:outline-none focus:ring-1 focus:ring-yumara-500">
                     </div>
-                    <button type="button" onclick="app.removeBoardItemRow('${rowId}')" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg">
+                    <button type="button" onclick="app.removeBoardItemRow('${rowId}')" class="p-2 text-slate-400 hover:text-rose-600 rounded-xl transition-colors">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                 `;
@@ -1441,7 +1058,7 @@
                 document.getElementById('order-form-badge').innerText = 'Editing';
                 document.getElementById('btn-cancel-edit').classList.remove('hidden');
 
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 120, behavior: 'smooth' });
             }
 
             resetOrderForm() {
