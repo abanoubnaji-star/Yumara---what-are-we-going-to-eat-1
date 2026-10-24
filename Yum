@@ -25,7 +25,7 @@
                         },
                         cream: {
                             50: '#faf9f5',
-                            100: '#f8f6f0', // Canvas background from logo
+                            100: '#f8f6f0', // Canvas background
                             200: '#f3efe6',
                             300: '#e8e2d4',
                             400: '#d7cdb9',
@@ -43,12 +43,15 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f8f6f0;
             color: #2d3524;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
         }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f3efe6; }
@@ -62,24 +65,19 @@
 
     <!-- Header Navigation -->
     <header class="bg-white/90 backdrop-blur-md border-b border-cream-300 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex justify-between items-center h-16">
                 <!-- Yumara Logo & Title -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="app.goHome()">
+                <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="app.goHome()">
                     <div class="flex items-center gap-2 text-yumara-600">
                         <svg class="h-8 w-auto fill-current" viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Cloche Dome -->
                             <path d="M 15 52 A 28 28 0 0 1 71 52 Z M 10 55 L 76 55 A 3 3 0 0 1 76 61 L 10 61 A 3 3 0 0 1 10 55 Z" />
-                            <!-- Fork -->
                             <path d="M 83 23 L 83 40 C 83 46 99 46 99 40 L 99 23 L 95 23 L 95 36 L 93 36 L 93 23 L 89 23 L 89 36 L 87 36 L 87 23 Z M 89 44 L 93 44 L 93 68 L 89 68 Z" />
-                            <!-- Knife -->
                             <path d="M 103 23 C 111 23 112 38 111 46 L 103 46 Z M 105 48 L 109 48 L 109 68 L 105 68 Z" />
-                            <!-- Seasoning Dots -->
                             <circle cx="73" cy="69" r="3" />
                             <circle cx="82" cy="74" r="2.5" />
                             <circle cx="94" cy="71" r="2" />
                             <circle cx="98" cy="76" r="2.5" />
-                            <!-- 'yumara' Text -->
                             <text x="120" y="65" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="46" letter-spacing="-1">yumara</text>
                         </svg>
                     </div>
@@ -87,6 +85,11 @@
 
                 <!-- Navigation Controls -->
                 <div class="flex items-center space-x-2">
+                    <div id="sync-status-indicator" class="inline-flex items-center space-x-1.5 px-2.5 py-1 text-[11px] font-bold rounded-lg bg-cream-200 text-forest-800 border border-cream-300">
+                        <span id="sync-dot" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                        <span id="sync-status-text">Connecting Firestore...</span>
+                    </div>
+
                     <button onclick="app.openHistoryModal()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-yumara-800 bg-cream-200 hover:bg-cream-300 rounded-lg transition-colors border border-cream-300">
                         <i data-lucide="history" class="w-4 h-4"></i>
                         <span class="hidden sm:inline">Order History</span>
@@ -101,280 +104,305 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6">
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6">
 
-        <!-- VIEW 1: LANDING PAGE -->
-        <div id="view-landing" class="hidden flex flex-col items-center justify-center py-12 text-center max-w-xl mx-auto">
-            <div class="w-24 h-24 bg-yumara-100 rounded-3xl flex items-center justify-center text-yumara-600 mb-6 shadow-inner border border-yumara-200">
-                <svg class="h-12 w-auto fill-current" viewBox="0 0 120 80">
-                    <path d="M 15 52 A 28 28 0 0 1 71 52 Z M 10 55 L 76 55 A 3 3 0 0 1 76 61 L 10 61 A 3 3 0 0 1 10 55 Z" />
-                    <path d="M 83 23 L 83 40 C 83 46 99 46 99 40 L 99 23 L 95 23 L 95 36 L 93 36 L 93 23 L 89 23 L 89 36 L 87 36 L 87 23 Z M 89 44 L 93 44 L 93 68 L 89 68 Z" />
-                    <path d="M 103 23 C 111 23 112 38 111 46 L 103 46 Z M 105 48 L 109 48 L 109 68 L 105 68 Z" />
-                </svg>
-            </div>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-forest-800 mb-2 tracking-tight">What Are We Going to Eat?</h2>
-            <p class="text-yumara-600 text-xs font-bold uppercase tracking-widest mb-4">Powered by yumara</p>
-            <p class="text-slate-600 mb-8 leading-relaxed text-sm sm:text-base">
-                Coordinate group food orders seamlessly. Generate unique links for your colleagues, allow everyone to keep a personal edit link, and calculate delivery & tax shares automatically in <strong>EGP (ج.م)</strong>!
-            </p>
-            <div class="flex flex-col sm:flex-row gap-3">
-                <button onclick="app.showCreateSessionModal()" class="inline-flex justify-center items-center space-x-2 px-6 py-3 text-sm font-bold text-white bg-yumara-600 hover:bg-yumara-700 rounded-xl shadow-lg shadow-yumara-600/20 transition-all transform hover:-translate-y-0.5">
-                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                    <span>Start New Group Order</span>
-                </button>
-                <button onclick="app.openHistoryModal()" class="inline-flex justify-center items-center space-x-2 px-6 py-3 text-sm font-bold text-forest-800 bg-white border border-cream-300 hover:bg-cream-100 rounded-xl shadow-sm transition-all">
-                    <i data-lucide="history" class="w-5 h-5"></i>
-                    <span>View Order History</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- VIEW 2: PARTICIPANT / GUEST VIEW -->
-        <div id="view-participant" class="hidden max-w-xl mx-auto space-y-6">
+        <!-- VIEW 1: LANDING PAGE & RECOMMENDATIONS -->
+        <div id="view-landing" class="space-y-12">
             
-            <!-- Participant Header & Restaurant Info -->
-            <div class="bg-white rounded-2xl p-5 sm:p-6 border border-cream-300 shadow-sm relative overflow-hidden space-y-4">
-                <div class="flex items-center justify-between">
-                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-yumara-100 text-yumara-800 border border-yumara-200">
-                        COLLEAGUE ORDER FORM
-                    </span>
-                    <span id="guest-lock-status" class="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live & Open
-                    </span>
+            <!-- Hero / Quick Join Section -->
+            <div class="flex flex-col items-center justify-center py-6 text-center max-w-xl mx-auto space-y-6">
+                <div class="w-20 h-20 bg-yumara-100 rounded-3xl flex items-center justify-center text-yumara-600 shadow-inner border border-yumara-200">
+                    <svg class="h-10 w-auto fill-current" viewBox="0 0 120 80">
+                        <path d="M 15 52 A 28 28 0 0 1 71 52 Z M 10 55 L 76 55 A 3 3 0 0 1 76 61 L 10 61 A 3 3 0 0 1 10 55 Z" />
+                        <path d="M 83 23 L 83 40 C 83 46 99 46 99 40 L 99 23 L 95 23 L 95 36 L 93 36 L 93 23 L 89 23 L 89 36 L 87 36 L 87 23 Z M 89 44 L 93 44 L 93 68 L 89 68 Z" />
+                        <path d="M 103 23 C 111 23 112 38 111 46 L 103 46 Z M 105 48 L 109 48 L 109 68 L 105 68 Z" />
+                    </svg>
                 </div>
-
+                
                 <div>
-                    <h2 id="guest-restaurant-name" class="text-2xl font-extrabold text-forest-800 tracking-tight">Restaurant Name</h2>
-                    <p id="guest-session-admin" class="text-xs text-slate-500 mt-0.5">Organized by Admin</p>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-forest-800 tracking-tight">What Are We Going to Eat?</h2>
+                    <p class="text-yumara-600 text-xs font-bold uppercase tracking-widest mt-1">Live Group Food Ordering in Egypt • EGP (ج.م)</p>
+                    <p class="text-slate-600 mt-3 text-sm leading-relaxed max-w-md mx-auto">
+                        Real-time collaborative ordering across phones &amp; laptops. Discover legendary Egyptian spots, split delivery fees, and settle through InstaPay or Cash.
+                    </p>
                 </div>
 
-                <!-- Menu Links / Image Attachments -->
-                <div class="flex flex-wrap gap-2 pt-1">
-                    <a id="guest-menu-link-btn" href="#" target="_blank" class="hidden inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold text-yumara-700 bg-yumara-50 hover:bg-yumara-100 rounded-xl border border-yumara-200">
-                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                        <span>View Online Menu</span>
-                    </a>
-                    <button id="guest-menu-img-btn" onclick="app.openMenuImageModal()" class="hidden inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold text-forest-800 bg-cream-200 hover:bg-cream-300 rounded-xl border border-cream-300">
-                        <i data-lucide="image" class="w-3.5 h-3.5"></i>
-                        <span>View Uploaded Menu Image</span>
-                    </button>
-                </div>
-
-                <!-- Personal Link Notification Card -->
-                <div id="personal-link-card" class="p-4 bg-yumara-50 border border-yumara-300 rounded-2xl space-y-2">
-                    <div class="flex items-start justify-between">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-7 h-7 rounded-lg bg-yumara-600 text-white flex items-center justify-center shrink-0">
-                                <i data-lucide="link-2" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-extrabold text-xs text-forest-800">Your Personal Edit Link</h4>
-                                <p class="text-[11px] text-slate-600">Save or copy this unique link to edit your order anytime!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 pt-1">
-                        <input type="text" id="personal-link-input" readonly class="w-full text-xs px-3 py-1.5 rounded-lg border border-yumara-200 bg-white font-mono text-slate-600 select-all">
-                        <button onclick="app.generateAndCopyPersonalLink()" class="px-3 py-1.5 bg-yumara-600 hover:bg-yumara-700 text-white text-xs font-bold rounded-lg shrink-0 shadow-sm flex items-center space-x-1">
-                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                            <span>Generate & Copy</span>
+                <!-- Join With Code Box -->
+                <div class="w-full bg-white rounded-2xl p-5 border border-cream-300 shadow-sm space-y-3">
+                    <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider text-left">
+                        Have a 6-Character Session Code?
+                    </label>
+                    <div class="flex gap-2">
+                        <input type="text" id="join-code-input" maxlength="7" placeholder="e.g. YUM482" 
+                               class="code-font uppercase text-center text-lg font-extrabold tracking-widest flex-1 px-4 py-2.5 rounded-xl border border-cream-300 bg-cream-50 text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
+                        <button onclick="app.joinByCode()" class="px-5 py-2.5 bg-forest-800 hover:bg-forest-900 text-white font-bold text-sm rounded-xl transition-colors shadow-sm flex items-center gap-1.5">
+                            <span>Join</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Input: Name -->
-                <div class="pt-2 border-t border-cream-200 space-y-1">
-                    <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider">1. Your Name *</label>
-                    <input type="text" id="guest-name-input" placeholder="e.g. Ahmed, Sarah..." oninput="app.checkExistingColleagueName()" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-cream-300 bg-cream-50 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600 font-semibold text-forest-800">
-                </div>
-
-                <!-- Presets Quick Bar -->
-                <div id="guest-presets-wrapper" class="hidden space-y-1.5">
-                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">Quick Add Menu Presets</label>
-                    <div id="guest-presets-list" class="flex flex-wrap gap-1.5"></div>
-                </div>
-
-                <!-- Items Input Rows -->
-                <div class="space-y-3 pt-2 border-t border-cream-200">
-                    <div class="flex justify-between items-center">
-                        <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider">2. Your Order Items & Prices (EGP) *</label>
-                        <span id="guest-editing-indicator" class="hidden text-[11px] font-bold text-yumara-700 bg-yumara-100 px-2 py-0.5 rounded-md">
-                            Editing Your Order
-                        </span>
-                    </div>
-                    
-                    <div id="guest-items-list" class="space-y-2.5"></div>
-
-                    <button type="button" onclick="app.addGuestItemRow()" class="w-full py-2 px-3 border border-dashed border-yumara-300 hover:border-yumara-600 hover:bg-yumara-50 text-yumara-700 text-xs font-bold rounded-xl flex items-center justify-center space-x-1.5 transition-all">
-                        <i data-lucide="plus" class="w-4 h-4"></i>
-                        <span>Add Another Item</span>
+                <!-- Or Start New Order / History -->
+                <div class="flex flex-col sm:flex-row gap-3 w-full">
+                    <button onclick="app.showCreateSessionModal()" class="flex-1 inline-flex justify-center items-center space-x-2 px-6 py-3.5 text-sm font-bold text-white bg-yumara-600 hover:bg-yumara-700 rounded-xl shadow-lg shadow-yumara-600/20 transition-all transform hover:-translate-y-0.5">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        <span>Start Custom Group Order</span>
+                    </button>
+                    <button onclick="app.openHistoryModal()" class="inline-flex justify-center items-center space-x-2 px-5 py-3.5 text-sm font-bold text-forest-800 bg-white border border-cream-300 hover:bg-cream-100 rounded-xl shadow-sm transition-all">
+                        <i data-lucide="history" class="w-5 h-5"></i>
+                        <span>Past Sessions</span>
                     </button>
                 </div>
+            </div>
 
-                <!-- Automatic Real-time Breakdown -->
-                <div class="bg-forest-800 text-white rounded-2xl p-4 space-y-2 text-xs shadow-md">
-                    <div class="flex justify-between text-cream-200">
-                        <span>Items Subtotal:</span>
-                        <span id="calc-guest-subtotal" class="font-bold text-white">0.00 EGP</span>
+            <!-- EGYPT RESTAURANT RECOMMENDATIONS SECTION -->
+            <section class="border-t border-cream-300 pt-8 space-y-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <div class="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-yumara-100 text-yumara-800 text-[11px] font-extrabold mb-1.5 border border-yumara-200">
+                            <span>🇪🇬 Popular in Egypt</span>
+                            <span class="w-1 h-1 rounded-full bg-yumara-600"></span>
+                            <span>Office &amp; Gathering Favorites</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-forest-800 tracking-tight">Need Food Inspiration? Order from Egypt’s Best</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Pick a restaurant below to instantly launch a live room with pre-loaded menu presets and delivery estimates.</p>
                     </div>
-                    <div class="flex justify-between text-cream-200">
-                        <span>Delivery Fee Share:</span>
-                        <span id="calc-guest-delivery-share" class="font-bold text-white">0.00 EGP</span>
-                    </div>
-                    <div class="flex justify-between text-cream-200">
-                        <span>Tax Share (<span id="calc-guest-tax-mode-label">Fixed</span>):</span>
-                        <span id="calc-guest-tax-share" class="font-bold text-white">0.00 EGP</span>
-                    </div>
-                    <div class="text-[10px] text-yumara-200 italic pt-1" id="calc-guest-split-info">
-                        Split Mode: Equal per participant
-                    </div>
-                    <div class="pt-2 border-t border-forest-900/60 flex justify-between items-baseline text-sm">
-                        <span class="font-bold text-yumara-300">Total Amount Due:</span>
-                        <span id="calc-guest-grandtotal" class="text-lg font-extrabold text-yumara-300">0.00 EGP</span>
+
+                    <!-- Category Pills -->
+                    <div id="category-filters-container" class="flex flex-wrap gap-1.5">
+                        <!-- Populated by JavaScript -->
                     </div>
                 </div>
 
-                <!-- Submit / Update Button -->
-                <button id="guest-submit-btn" onclick="app.submitGuestOrder()" class="w-full py-3 bg-yumara-600 hover:bg-yumara-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-yumara-600/20 transition-all flex items-center justify-center space-x-2">
-                    <i data-lucide="check-circle-2" class="w-5 h-5"></i>
-                    <span id="guest-submit-btn-text">Submit Order to Group</span>
-                </button>
-            </div>
+                <!-- Restaurants Card Grid -->
+                <div id="restaurants-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Populated dynamically by renderRecommendations() -->
+                </div>
+            </section>
+
         </div>
 
-        <!-- VIEW 3: ADMIN CONTROL VIEW -->
-        <div id="view-admin" class="hidden space-y-6">
+        <!-- VIEW 2: UNIFIED COLLABORATIVE BOARD -->
+        <div id="view-session" class="hidden space-y-6">
 
-            <!-- Admin Banner -->
+            <!-- Universal Session Banner -->
             <div class="bg-white rounded-2xl p-5 sm:p-6 border border-cream-300 shadow-sm relative overflow-hidden">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <div class="flex items-center space-x-3 mb-1">
-                            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-yumara-100 text-yumara-800 border border-yumara-200">
-                                ADMIN DASHBOARD
+                    <div class="space-y-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <!-- 6-Char Session Code Badge -->
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-yumara-100 border border-yumara-300 text-yumara-900 text-xs font-bold">
+                                <span>CODE:</span>
+                                <span id="session-code-display" class="code-font text-sm font-extrabold tracking-wider">------</span>
+                                <button onclick="app.copySessionCode()" title="Copy Code" class="hover:text-yumara-700 ml-1">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+
+                            <span id="session-lock-badge" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live &amp; Open
                             </span>
-                            <span id="admin-status-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live & Open
-                            </span>
+
+                            <button id="admin-mode-toggle-btn" onclick="app.toggleAdminMode()" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-cream-200 hover:bg-cream-300 text-forest-800 border border-cream-300 flex items-center gap-1 transition-colors">
+                                <i data-lucide="shield" class="w-3.5 h-3.5 text-yumara-600"></i>
+                                <span id="admin-mode-toggle-text">Admin Settings</span>
+                            </button>
                         </div>
-                        <h2 id="admin-restaurant-name" class="text-2xl font-extrabold text-forest-800 tracking-tight">Restaurant Name</h2>
-                        <p id="admin-session-date" class="text-xs text-slate-500 mt-1">Today</p>
+
+                        <h2 id="session-restaurant-name" class="text-2xl font-extrabold text-forest-800 tracking-tight pt-1">Restaurant Name</h2>
+                        <p id="session-organizer-info" class="text-xs text-slate-500">Organized by Organizer</p>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex flex-wrap items-center gap-2">
-                        <button onclick="app.generateAndCopyFreshGuestLink()" class="inline-flex items-center space-x-2 px-3.5 py-2 text-xs font-bold text-white bg-yumara-600 hover:bg-yumara-700 rounded-xl shadow-sm transition-all">
+                        <button onclick="app.copyUniversalShareLink()" class="inline-flex items-center space-x-2 px-3.5 py-2 text-xs font-bold text-white bg-yumara-600 hover:bg-yumara-700 rounded-xl shadow-sm transition-all">
                             <i data-lucide="share-2" class="w-4 h-4"></i>
-                            <span>Generate Unique Share Link</span>
+                            <span>Copy Universal Link</span>
                         </button>
-                        <button onclick="app.copyWhatsAppSummary()" class="inline-flex items-center space-x-2 px-3.5 py-2 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 rounded-xl border border-emerald-200 transition-colors">
-                            <i data-lucide="message-square" class="w-4 h-4"></i>
-                            <span>WhatsApp Summary</span>
-                        </button>
-                        <button id="admin-lock-btn" onclick="app.toggleLockSession()" class="inline-flex items-center space-x-2 px-3.5 py-2 text-xs font-bold text-forest-800 bg-cream-200 hover:bg-cream-300 rounded-xl border border-cream-300 transition-colors">
-                            <i data-lucide="lock" class="w-4 h-4"></i>
-                            <span id="admin-lock-btn-text">Lock Orders</span>
+                        <a id="session-menu-link-btn" href="#" target="_blank" class="hidden inline-flex items-center space-x-1.5 px-3 py-2 text-xs font-bold text-yumara-800 bg-yumara-50 hover:bg-yumara-100 rounded-xl border border-yumara-200">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                            <span>Online Menu</span>
+                        </a>
+                        <button id="session-menu-img-btn" onclick="app.openMenuImageModal()" class="hidden inline-flex items-center space-x-1.5 px-3 py-2 text-xs font-bold text-forest-800 bg-cream-200 hover:bg-cream-300 rounded-xl border border-cream-300">
+                            <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                            <span>Menu Photo</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Admin Grid: Orders Stream & Fee Calculations -->
+            <!-- Grid: Left = Add/Edit Form & Order Board, Right = Bill & Admin Controls -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                <!-- Col 1: Submitted Colleague Orders Stream (col-span-7) -->
-                <div class="lg:col-span-7 space-y-4">
-                    <div class="bg-white rounded-2xl p-5 sm:p-6 border border-cream-300 shadow-sm space-y-4">
+                <!-- Main Col (col-span-7) -->
+                <div class="lg:col-span-7 space-y-6">
+
+                    <!-- QUICK ORDER INPUT FORM -->
+                    <div class="bg-white rounded-2xl p-5 border border-cream-300 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-cream-200 pb-3">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="utensils" class="w-4 h-4 text-yumara-600"></i>
+                                <h3 id="order-form-header-title" class="font-bold text-forest-800 text-sm sm:text-base">Add or Update Your Order</h3>
+                            </div>
+                            <span id="order-form-badge" class="hidden px-2 py-0.5 rounded text-[11px] font-bold bg-yumara-100 text-yumara-800 border border-yumara-200">
+                                Editing Existing
+                            </span>
+                        </div>
+
+                        <!-- 1. Name & Payment Method -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Your Name *</label>
+                                <input type="text" id="order-input-name" placeholder="e.g. Ahmed, Sarah, Omar..." oninput="app.handleNameInputCheck()" 
+                                       class="w-full text-xs sm:text-sm px-3 py-2 rounded-xl border border-cream-300 bg-cream-50 font-semibold text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Payment Method *</label>
+                                <div class="grid grid-cols-2 gap-1.5">
+                                    <button type="button" id="pay-choice-instapay" onclick="app.setOrderPaymentMethod('InstaPay')" class="py-2 px-2 text-xs font-bold rounded-xl border border-yumara-600 bg-yumara-50 text-yumara-800 flex items-center justify-center space-x-1">
+                                        <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+                                        <span>InstaPay</span>
+                                    </button>
+                                    <button type="button" id="pay-choice-cash" onclick="app.setOrderPaymentMethod('Cash')" class="py-2 px-2 text-xs font-bold rounded-xl border border-cream-300 bg-cream-100 text-forest-800 flex items-center justify-center space-x-1">
+                                        <i data-lucide="banknote" class="w-3.5 h-3.5"></i>
+                                        <span>Cash</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Menu Quick Presets (Interactive 1-Click addition) -->
+                        <div id="board-presets-wrapper" class="hidden space-y-1.5 pt-1">
+                            <div class="flex items-center justify-between">
+                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">Quick Egyptian Menu Presets (Tap to add)</label>
+                                <span class="text-[10px] text-yumara-600 font-semibold">Click dish to add instantly</span>
+                            </div>
+                            <div id="board-presets-list" class="flex flex-wrap gap-1.5"></div>
+                        </div>
+
+                        <!-- 2. Items List -->
+                        <div class="space-y-2 pt-2 border-t border-cream-200">
+                            <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider">Food Items &amp; Prices (EGP / ج.م)</label>
+                            <div id="board-items-inputs" class="space-y-2"></div>
+
+                            <button type="button" onclick="app.addBoardItemRow()" class="w-full py-2 px-3 border border-dashed border-yumara-300 hover:border-yumara-600 hover:bg-yumara-50 text-yumara-700 text-xs font-bold rounded-xl flex items-center justify-center space-x-1.5 transition-all">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                <span>Add Another Custom Item</span>
+                            </button>
+                        </div>
+
+                        <!-- 3. Notes -->
+                        <div>
+                            <input type="text" id="order-input-note" placeholder="Special note (e.g. no onions, extra tahina, well done)..." class="w-full text-xs px-3 py-2 rounded-xl border border-cream-300 bg-cream-50 font-medium text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
+                        </div>
+
+                        <!-- Submit Order Button -->
+                        <div class="flex gap-2 pt-1">
+                            <button id="btn-submit-order" onclick="app.submitColleagueOrder()" class="flex-1 py-2.5 bg-yumara-600 hover:bg-yumara-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-yumara-600/20 transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                <span id="btn-submit-order-text">Add My Order to Board</span>
+                            </button>
+                            <button id="btn-cancel-edit" onclick="app.resetOrderForm()" class="hidden px-4 py-2.5 text-xs font-bold text-slate-500 hover:bg-cream-100 border border-cream-300 rounded-xl">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- UNIVERSAL SHARED ORDERS BOARD -->
+                    <div class="bg-white rounded-2xl p-5 border border-cream-300 shadow-sm space-y-4">
                         <div class="flex items-center justify-between border-b border-cream-200 pb-3">
                             <div class="flex items-center space-x-2">
                                 <i data-lucide="users" class="w-5 h-5 text-yumara-600"></i>
-                                <h3 class="font-bold text-forest-800 text-base">Live Team Orders Stream</h3>
+                                <h3 class="font-bold text-forest-800 text-base">All Colleagues' Orders</h3>
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <button onclick="app.openAdminEditModal()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold text-yumara-700 bg-yumara-50 hover:bg-yumara-100 rounded-lg border border-yumara-200 transition-colors">
-                                    <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
-                                    <span>Add Colleague Order</span>
-                                </button>
-                                <span id="admin-participant-count" class="text-xs font-bold bg-cream-200 px-2.5 py-1 rounded-full text-forest-800 border border-cream-300">
-                                    0 Orders
-                                </span>
-                            </div>
+                            <span id="board-participants-count" class="text-xs font-bold bg-cream-200 px-2.5 py-1 rounded-full text-forest-800 border border-cream-300">
+                                0 Orders
+                            </span>
                         </div>
 
-                        <div id="admin-participants-list" class="space-y-4 divide-y divide-cream-200"></div>
+                        <!-- Orders Stream -->
+                        <div id="board-orders-list" class="space-y-4 divide-y divide-cream-200"></div>
                     </div>
+
                 </div>
 
-                <!-- Col 2: Settings & Financial Breakdown (col-span-5) -->
+                <!-- Right Col: Calculations & Admin Panel (col-span-5) -->
                 <div class="lg:col-span-5 space-y-6">
 
-                    <!-- Delivery & Tax Controls -->
-                    <div class="bg-white rounded-2xl p-5 sm:p-6 border border-cream-300 shadow-sm space-y-4">
-                        <div class="flex items-center space-x-2 border-b border-cream-200 pb-3">
-                            <i data-lucide="receipt" class="w-5 h-5 text-yumara-600"></i>
-                            <h3 class="font-bold text-forest-800 text-base">Taxes & Delivery Splitting</h3>
-                        </div>
-
-                        <div class="space-y-3">
-                            <div>
-                                <label class="block text-xs font-bold text-forest-800 mb-1">Total Delivery Fee (EGP)</label>
-                                <input type="number" id="admin-delivery-fee" min="0" step="0.5" placeholder="0.00" onchange="app.updateFeesFromAdmin()" oninput="app.updateFeesFromAdmin()" class="w-full text-sm px-3.5 py-2 rounded-xl border border-cream-300 bg-cream-50 font-semibold text-forest-800">
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-forest-800 mb-1">Tax / Service Charge Type</label>
-                                <div class="grid grid-cols-2 gap-2 mb-2">
-                                    <button type="button" id="tax-type-fixed" onclick="app.setTaxType('fixed')" class="py-1.5 text-xs font-bold rounded-lg border border-yumara-600 bg-yumara-50 text-yumara-700">Fixed Amount (EGP)</button>
-                                    <button type="button" id="tax-type-percent" onclick="app.setTaxType('percent')" class="py-1.5 text-xs font-bold rounded-lg border border-cream-300 bg-cream-100 text-forest-800">Percentage (%)</button>
-                                </div>
-                                <input type="number" id="admin-service-fee" min="0" step="0.1" placeholder="0" onchange="app.updateFeesFromAdmin()" oninput="app.updateFeesFromAdmin()" class="w-full text-sm px-3.5 py-2 rounded-xl border border-cream-300 bg-cream-50 font-semibold text-forest-800">
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-forest-800 mb-1">Fee & Tax Calculation Mode</label>
-                                <select id="admin-split-method" onchange="app.updateFeesFromAdmin()" class="w-full text-sm px-3.5 py-2 rounded-xl border border-cream-300 bg-cream-50 font-semibold text-forest-800">
-                                    <option value="equal">Equal Split (Divided equally per person)</option>
-                                    <option value="proportional">Proportional Split (Based on subtotal amount)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Grand Total Summary -->
-                    <div class="bg-forest-800 text-white rounded-2xl p-5 sm:p-6 shadow-xl space-y-4 border border-forest-900">
+                    <!-- Grand Total Summary Card -->
+                    <div class="bg-forest-800 text-white rounded-2xl p-5 shadow-xl space-y-4 border border-forest-900">
                         <div class="flex items-center justify-between border-b border-forest-900/60 pb-3">
-                            <h3 class="font-bold text-base text-yumara-300">Total Group Summary</h3>
+                            <h3 class="font-bold text-base text-yumara-300">Total Group Bill</h3>
                             <span class="text-xs bg-forest-900 text-yumara-200 px-2.5 py-0.5 rounded-full font-semibold">EGP / ج.م</span>
                         </div>
 
                         <div class="space-y-2 text-xs text-cream-200">
                             <div class="flex justify-between">
-                                <span>Food Items Subtotal:</span>
-                                <span id="admin-summary-subtotal" class="font-bold text-white">0.00 EGP</span>
+                                <span>Food Subtotal:</span>
+                                <span id="summary-subtotal" class="font-bold text-white">0.00 EGP</span>
                             </div>
                             <div class="flex justify-between">
                                 <span>Delivery Fee:</span>
-                                <span id="admin-summary-delivery" class="font-bold text-white">0.00 EGP</span>
+                                <span id="summary-delivery" class="font-bold text-white">0.00 EGP</span>
                             </div>
                             <div class="flex justify-between">
-                                <span>Total Tax / Service:</span>
-                                <span id="admin-summary-service" class="font-bold text-white">0.00 EGP</span>
+                                <span>Taxes / Service:</span>
+                                <span id="summary-tax" class="font-bold text-white">0.00 EGP</span>
                             </div>
                             <div class="pt-2 border-t border-forest-900/60 flex justify-between items-baseline text-sm">
-                                <span class="font-bold text-white">Grand Total Bill:</span>
-                                <span id="admin-summary-grandtotal" class="text-xl font-extrabold text-yumara-300">0.00 EGP</span>
+                                <span class="font-bold text-white">Grand Total:</span>
+                                <span id="summary-grandtotal" class="text-xl font-extrabold text-yumara-300">0.00 EGP</span>
                             </div>
+                        </div>
+
+                        <div class="text-[11px] text-yumara-200 bg-forest-900/60 p-2.5 rounded-xl border border-forest-900">
+                            <p id="summary-split-explanation">Delivery &amp; taxes are split equally among all members.</p>
                         </div>
                     </div>
 
-                    <!-- Preset Items Manager -->
-                    <div class="bg-white rounded-2xl p-5 border border-cream-300 shadow-sm space-y-3">
-                        <h4 class="font-bold text-forest-800 text-sm">Preset Menu Items</h4>
-                        <p class="text-xs text-slate-500">Add preset items for quick colleague selection.</p>
-                        <button onclick="app.openAdminMenuModal()" class="w-full py-2.5 px-4 bg-cream-200 hover:bg-cream-300 text-forest-800 font-bold text-xs rounded-xl flex items-center justify-center space-x-2 border border-cream-300">
-                            <i data-lucide="settings" class="w-4 h-4"></i>
-                            <span>Manage Presets</span>
-                        </button>
+                    <!-- ADMIN CONTROLS PANEL -->
+                    <div id="admin-panel" class="bg-white rounded-2xl p-5 border border-cream-300 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-cream-200 pb-3">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="sliders" class="w-4 h-4 text-yumara-600"></i>
+                                <h3 class="font-bold text-forest-800 text-sm">Admin &amp; Splitting Settings</h3>
+                            </div>
+                            <button id="admin-lock-btn" onclick="app.toggleLockSession()" class="inline-flex items-center space-x-1.5 px-2.5 py-1 text-xs font-bold text-forest-800 bg-cream-200 hover:bg-cream-300 rounded-lg border border-cream-300">
+                                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                                <span id="admin-lock-btn-text">Lock Orders</span>
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-bold text-forest-800 mb-1">Delivery Fee (EGP)</label>
+                                <input type="number" id="admin-input-delivery" min="0" step="0.5" placeholder="0.00" oninput="app.updateAdminFees()" class="w-full text-xs px-3 py-2 rounded-xl border border-cream-300 bg-cream-50 font-semibold text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-forest-800 mb-1">Tax / Service Charge Type</label>
+                                <div class="grid grid-cols-2 gap-1.5 mb-1.5">
+                                    <button type="button" id="tax-type-fixed" onclick="app.setTaxType('fixed')" class="py-1.5 text-xs font-bold rounded-lg border border-yumara-600 bg-yumara-50 text-yumara-700">Fixed (EGP)</button>
+                                    <button type="button" id="tax-type-percent" onclick="app.setTaxType('percent')" class="py-1.5 text-xs font-bold rounded-lg border border-cream-300 bg-cream-100 text-forest-800">Percentage (%)</button>
+                                </div>
+                                <input type="number" id="admin-input-tax" min="0" step="0.1" placeholder="0" oninput="app.updateAdminFees()" class="w-full text-xs px-3 py-2 rounded-xl border border-cream-300 bg-cream-50 font-semibold text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-forest-800 mb-1">Fee Splitting Mode</label>
+                                <select id="admin-select-split" onchange="app.updateAdminFees()" class="w-full text-xs px-3 py-2 rounded-xl border border-cream-300 bg-cream-50 font-semibold text-forest-800 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600">
+                                    <option value="equal">Equal Split (Divided per person)</option>
+                                    <option value="proportional">Proportional (Based on food subtotal)</option>
+                                </select>
+                            </div>
+
+                            <div class="pt-2">
+                                <button onclick="app.openAdminMenuModal()" class="w-full py-2 bg-cream-200 hover:bg-cream-300 text-forest-800 font-bold text-xs rounded-xl flex items-center justify-center space-x-1.5 border border-cream-300">
+                                    <i data-lucide="list-plus" class="w-3.5 h-3.5"></i>
+                                    <span>Manage Preset Menu Items</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -402,7 +430,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Admin / Organizer Name *</label>
+                    <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Organizer Name *</label>
                     <input type="text" id="create-admin-name" required placeholder="Your name (e.g. Mostafa)" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-cream-300 bg-cream-50 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600 font-medium text-forest-800">
                 </div>
 
@@ -411,21 +439,18 @@
                     <input type="url" id="create-menu-url" placeholder="https://elmenus.com/..." class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-cream-300 bg-cream-50 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600 font-medium text-forest-800">
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Upload Menu Photo (Optional)</label>
-                    <input type="file" id="create-menu-file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-yumara-50 file:text-yumara-700">
-                </div>
-
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Delivery Fee (EGP)</label>
                         <input type="number" id="create-delivery-fee" min="0" step="0.5" placeholder="0" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-cream-300 bg-cream-50 font-medium text-forest-800">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Tax/Service</label>
+                        <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Tax/Service (EGP)</label>
                         <input type="number" id="create-service-fee" min="0" step="0.5" placeholder="0" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-cream-300 bg-cream-50 font-medium text-forest-800">
                     </div>
                 </div>
+
+                <input type="hidden" id="create-prefill-presets" value="">
 
                 <div class="pt-3 flex justify-end space-x-2">
                     <button type="button" onclick="app.closeModal('modal-create-session')" class="px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-cream-100 rounded-xl">Cancel</button>
@@ -435,49 +460,6 @@
                     </button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!-- MODAL: ADMIN EDIT / ADD PARTICIPANT ORDER -->
-    <div id="modal-admin-edit-order" class="fixed inset-0 bg-forest-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-cream-300 space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <div class="flex justify-between items-center border-b border-cream-200 pb-3">
-                <h3 id="admin-edit-title" class="font-extrabold text-forest-800 text-lg">Edit Colleague Order</h3>
-                <button onclick="app.closeModal('modal-admin-edit-order')" class="text-slate-400 hover:text-slate-600">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <div class="space-y-4">
-                <input type="hidden" id="admin-edit-participant-id">
-                
-                <div>
-                    <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Colleague Name *</label>
-                    <input type="text" id="admin-edit-name-input" placeholder="e.g. Mahmoud, Nour..." class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-cream-300 bg-cream-50 focus:outline-none focus:ring-2 focus:ring-yumara-500/20 focus:border-yumara-600 font-semibold text-forest-800">
-                </div>
-
-                <div class="space-y-2 pt-2 border-t border-cream-200">
-                    <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider">Order Items & Prices (EGP)</label>
-                    <div id="admin-edit-items-list" class="space-y-2.5"></div>
-                    <button type="button" onclick="app.addAdminEditRow()" class="w-full py-2 px-3 border border-dashed border-yumara-300 hover:border-yumara-600 hover:bg-yumara-50 text-yumara-700 text-xs font-bold rounded-xl flex items-center justify-center space-x-1.5 transition-all">
-                        <i data-lucide="plus" class="w-4 h-4"></i>
-                        <span>Add Item</span>
-                    </button>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-forest-800 uppercase tracking-wider mb-1">Admin Notes / Special Instructions</label>
-                    <input type="text" id="admin-edit-note-input" placeholder="e.g. Requested extra sauce, 10 EGP discount applied..." class="w-full text-xs px-3.5 py-2 rounded-xl border border-cream-300 bg-cream-50 font-medium text-forest-800">
-                </div>
-
-                <div class="pt-3 flex justify-end space-x-2 border-t border-cream-200">
-                    <button type="button" onclick="app.closeModal('modal-admin-edit-order')" class="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-cream-100 rounded-xl">Cancel</button>
-                    <button type="button" onclick="app.saveAdminOrderEdit()" class="px-5 py-2 text-xs font-bold text-white bg-yumara-600 hover:bg-yumara-700 rounded-xl shadow-md shadow-yumara-600/20 flex items-center space-x-1.5">
-                        <i data-lucide="check" class="w-4 h-4"></i>
-                        <span>Save Order Changes</span>
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -503,15 +485,15 @@
         </div>
     </div>
 
-    <!-- MODAL: PAST HISTORICAL SESSIONS ARCHIVE & DELETION -->
+    <!-- MODAL: ORDER HISTORY ARCHIVE -->
     <div id="modal-history" class="fixed inset-0 bg-forest-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-cream-300 space-y-4 max-h-[85vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center border-b border-cream-200 pb-3">
                 <h3 class="font-extrabold text-forest-800 text-lg">Order History Archive</h3>
                 <div class="flex items-center space-x-2">
-                    <button onclick="app.clearAllHistory()" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold rounded-lg flex items-center space-x-1">
+                    <button onclick="app.promptClearAllHistory()" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold rounded-lg flex items-center space-x-1">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                        <span>Clear All History</span>
+                        <span>Clear History</span>
                     </button>
                     <button onclick="app.closeModal('modal-history')" class="text-slate-400 hover:text-slate-600">
                         <i data-lucide="x" class="w-5 h-5"></i>
@@ -534,142 +516,501 @@
         </div>
     </div>
 
-    <!-- Firebase Async Import Guard Module -->
+    <!-- MODAL: CUSTOM CONFIRMATION MODAL -->
+    <div id="modal-custom-confirm" class="fixed inset-0 bg-forest-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-cream-300 space-y-4">
+            <div class="flex items-center space-x-3 text-forest-800">
+                <i data-lucide="help-circle" class="w-6 h-6 text-yumara-600"></i>
+                <h4 id="custom-confirm-title" class="font-extrabold text-base">Confirm Action</h4>
+            </div>
+            <p id="custom-confirm-message" class="text-xs text-slate-600 leading-relaxed">Are you sure you want to proceed?</p>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button type="button" id="custom-confirm-cancel-btn" class="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-cream-100 rounded-xl">Cancel</button>
+                <button type="button" id="custom-confirm-accept-btn" class="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Imports & Application Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        let db = null;
-        let auth = null;
-        let appId = typeof __app_id !== 'undefined' ? __app_id : 'food-order-app';
+        // Provided Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_AIxDvI_BCGJpwbec5iKDHp-rLIv1jGY",
+            authDomain: "yuma-b8b10.firebaseapp.com",
+            projectId: "yuma-b8b10",
+            storageBucket: "yuma-b8b10.firebasestorage.app",
+            messagingSenderId: "442514211341",
+            appId: "1:442514211341:web:33b789eec74e8ba3830b44"
+        };
 
-        try {
-            if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const fbApp = initializeApp(firebaseConfig);
-                db = getFirestore(fbApp);
-                auth = getAuth(fbApp);
+        const firebaseApp = initializeApp(firebaseConfig);
+        const auth = getAuth(firebaseApp);
+        const db = getFirestore(firebaseApp);
 
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    signInWithCustomToken(auth, __initial_auth_token).catch(() => signInAnonymously(auth));
-                } else {
-                    signInAnonymously(auth).catch(() => {});
-                }
+        // Curated Top Restaurants in Egypt with Authentic Presets & Pricing (EGP)
+        const EGYPT_RESTAURANTS = [
+            {
+                id: 'kebdet-elprince',
+                name: 'Kebdet El Prince (البرنس)',
+                category: 'authentic',
+                cuisine: 'Egyptian & Grilled Meats',
+                rating: 4.8,
+                reviews: '12.4k',
+                priceLevel: '₺₺',
+                avgPrice: '120 - 250 EGP',
+                areas: 'Imbaba • Cairo Delivery',
+                deliveryFee: 35,
+                menuUrl: 'https://www.elmenus.com/cairo/restaurants/kebdet-el-prince-imbaba',
+                highlights: ['Alexandrian Liver', 'Mombar', 'Molokhia Tagine', 'Stuffed Pigeon'],
+                presets: [
+                    { name: 'Alexandrian Liver (Kebda Eskandarani)', price: 125 },
+                    { name: 'Hawawshi Baladi Extra', price: 90 },
+                    { name: 'Molokhia Tagine with Plain Rice', price: 95 },
+                    { name: 'Mombar Plate (6 pcs)', price: 110 },
+                    { name: 'Meat Tagine with Onions', price: 195 },
+                    { name: 'Arugula & Tahina Salad Pack', price: 25 }
+                ]
+            },
+            {
+                id: 'zooba',
+                name: 'Zooba (زوبة)',
+                category: 'street',
+                cuisine: 'Gourmet Street Food & Falafel',
+                rating: 4.7,
+                reviews: '9.8k',
+                priceLevel: '₺₺',
+                avgPrice: '60 - 160 EGP',
+                areas: 'Zamalek • Maadi • New Cairo',
+                deliveryFee: 25,
+                menuUrl: 'https://zoobaeats.com',
+                highlights: ['Beetroot Hibiscus Taameya', 'Spicy Shakshouka', 'Grain Koshary'],
+                presets: [
+                    { name: 'Stuffed Taameya with Spicy Harissa', price: 38 },
+                    { name: 'Foul with Whole Grain Tahina', price: 42 },
+                    { name: 'Beef Sausage Hawawshi', price: 98 },
+                    { name: 'Signature Whole Grain Koshary', price: 75 },
+                    { name: 'Sweet Potato Fries with Dukkah', price: 45 },
+                    { name: 'Hibiscus Iced Lemonade', price: 35 }
+                ]
+            },
+            {
+                id: 'abou-tarek',
+                name: 'Koshary Abou Tarek (أبو طارق)',
+                category: 'authentic',
+                cuisine: 'World Famous Koshary',
+                rating: 4.9,
+                reviews: '24.1k',
+                priceLevel: '₺',
+                avgPrice: '35 - 90 EGP',
+                areas: 'Downtown • Greater Cairo',
+                deliveryFee: 20,
+                menuUrl: 'https://aboutarek.com',
+                highlights: ['Special Koshary Abou Tarek', 'Extra Crispy Fried Onions', 'Rice Pudding'],
+                presets: [
+                    { name: 'Koshary Abou Tarek Special Box', price: 55 },
+                    { name: 'Koshary Mega Star Box', price: 80 },
+                    { name: 'Extra Da’ah & Chili Salsa', price: 10 },
+                    { name: 'Extra Crispy Onions Bowl', price: 15 },
+                    { name: 'Roz Bel Laban (Egyptian Rice Pudding)', price: 30 }
+                ]
+            },
+            {
+                id: 'abou-el-sid',
+                name: 'Abou El Sid (أبو السيد)',
+                category: 'authentic',
+                cuisine: 'Traditional Egyptian Feasts',
+                rating: 4.6,
+                reviews: '6.5k',
+                priceLevel: '₺₺₺',
+                avgPrice: '200 - 450 EGP',
+                areas: 'Zamalek • Heliopolis • 6th October',
+                deliveryFee: 40,
+                menuUrl: 'https://www.elmenus.com/cairo/restaurants/abou-el-sid-zamalek',
+                highlights: ['Hamam Mahshi', 'Veal Shank Fatta', 'Moussaka'],
+                presets: [
+                    { name: 'Stuffed Pigeon (Hamam Mahshi)', price: 240 },
+                    { name: 'Egyptian Garlic & Vinegar Fatta with Veal', price: 295 },
+                    { name: 'Molokhia with Roasted Rabbit / Chicken', price: 230 },
+                    { name: 'Moussaka with Minced Beef', price: 170 },
+                    { name: 'Om Ali with Mixed Pistachios', price: 85 }
+                ]
+            },
+            {
+                id: 'buffalo-burger',
+                name: 'Buffalo Burger (بافلو برجر)',
+                category: 'burgers',
+                cuisine: 'Gourmet Smashed Burgers',
+                rating: 4.7,
+                reviews: '18.2k',
+                priceLevel: '₺₺',
+                avgPrice: '140 - 280 EGP',
+                areas: 'All Cairo & Giza • Alexandria',
+                deliveryFee: 30,
+                menuUrl: 'https://buffaloburger.com',
+                highlights: ['Shiitake Mushroom Burger', 'Hitchhiker', 'Rastafari Chicken'],
+                presets: [
+                    { name: 'Shiitake Mushroom Beef Burger (200g)', price: 195 },
+                    { name: 'Hitchhiker Double Beef Burger', price: 220 },
+                    { name: 'Secret Weapon Crisp Chicken Combo', price: 180 },
+                    { name: 'Curly Fries with Cheddar Sauce', price: 65 },
+                    { name: 'Buffalo Wings (6 pcs BBQ)', price: 95 }
+                ]
+            },
+            {
+                id: 'kazaz',
+                name: 'Kazaz (قزاز)',
+                category: 'street',
+                cuisine: 'Shawarma & Egyptian Breakfast',
+                rating: 4.7,
+                reviews: '15.3k',
+                priceLevel: '₺',
+                avgPrice: '40 - 130 EGP',
+                areas: 'Downtown • Sabri Abou Alam • Dokki',
+                deliveryFee: 20,
+                menuUrl: 'https://www.elmenus.com/cairo/restaurants/kazaz-downtown',
+                highlights: ['Kaiser Meat Shawarma', 'Crisp Broasted Chicken', 'Pastrami Taameya'],
+                presets: [
+                    { name: 'Egyptian Kaiser Beef Shawarma (Large)', price: 65 },
+                    { name: 'Syrian Bread Chicken Shawarma Wrap', price: 85 },
+                    { name: 'Foul with Alexandrian Sausage (Sogok)', price: 40 },
+                    { name: 'Omelette with Pastrami Kaiser', price: 38 },
+                    { name: 'Crispy Golden Fries with Spices', price: 25 }
+                ]
+            },
+            {
+                id: 'el-dahan',
+                name: 'El Dahan (الدهان)',
+                category: 'grilled',
+                cuisine: 'Charcoal Kebab & Kofta',
+                rating: 4.8,
+                reviews: '14.0k',
+                priceLevel: '₺₺₺',
+                avgPrice: '180 - 400 EGP',
+                areas: 'Nasr City • New Cairo • Mohandessin',
+                deliveryFee: 35,
+                menuUrl: 'https://eldahan.com',
+                highlights: ['Kandad Kebab', 'Baladi Kofta', 'Mix Grill Plate'],
+                presets: [
+                    { name: '1/4 Kg Charcoal Baladi Kofta Plate', price: 185 },
+                    { name: '1/4 Kg Mixed Kebab & Tarb', price: 240 },
+                    { name: 'Grilled Half Boneless Chicken Plate', price: 160 },
+                    { name: 'Basmati Rice with Nuts', price: 60 },
+                    { name: 'Assorted Mahshi Box (Vine leaves & Cabbage)', price: 90 }
+                ]
+            },
+            {
+                id: 'el-domiati',
+                name: 'El Domiati (الدمياطي)',
+                category: 'breakfast',
+                cuisine: 'Classic Egyptian Foul & Falafel',
+                rating: 4.6,
+                reviews: '11.0k',
+                priceLevel: '₺',
+                avgPrice: '25 - 75 EGP',
+                areas: 'Mohandessin • Dokki • Giza',
+                deliveryFee: 20,
+                menuUrl: 'https://www.elmenus.com/cairo/restaurants/el-domyati-dokki',
+                highlights: ['Zayt Har Foul', 'Stuffed Kiri Taameya', 'Fried Eggplant'],
+                presets: [
+                    { name: 'Foul with Flaxseed Oil (Zayt Har)', price: 25 },
+                    { name: 'Taameya Stuffed with Kiri Cheese', price: 22 },
+                    { name: 'Egyptian Fried Aubergine with Garlic Salsa', price: 24 },
+                    { name: 'Mashed Potatoes Baladi Bread Sandwich', price: 20 },
+                    { name: 'Pickled Lemon & Green Pepper Pack', price: 12 }
+                ]
+            },
+            {
+                id: 'semsoma',
+                name: 'Semsoma (سمسمة)',
+                category: 'street',
+                cuisine: 'Famous Petit Pain Shawarma',
+                rating: 4.8,
+                reviews: '13.7k',
+                priceLevel: '₺₺',
+                avgPrice: '60 - 150 EGP',
+                areas: 'Dokki • Mohandessin',
+                deliveryFee: 25,
+                menuUrl: 'https://www.elmenus.com/cairo/restaurants/semsoma-dokki',
+                highlights: ['Mini Beef Shawarma Kaiser', 'Garlic Dip Fries', 'Sogok Petit'],
+                presets: [
+                    { name: 'Signature Beef Shawarma Kaiser (Small)', price: 38 },
+                    { name: 'Signature Beef Shawarma (Large)', price: 68 },
+                    { name: 'Sogok Sandwiches Pack (3 Pcs)', price: 110 },
+                    { name: 'Pickled Turnips & Green Tahina Dip', price: 15 }
+                ]
             }
-        } catch (e) {
-            console.log("Operating in Zero-Config Dynamic State Payload Mode");
-        }
+        ];
 
-        window.firebaseStore = { db, auth, appId, doc, setDoc, deleteDoc, onSnapshot, collection, getDocs };
-    </script>
-
-    <!-- Core Application Logic -->
-    <script>
         class FoodOrderApp {
             constructor() {
-                this.sessionId = null;
-                this.userToken = null; // Unique personal token for colleagues
-                this.mode = 'landing'; // 'landing', 'guest', 'admin'
-                this.broadcastChannel = null;
-                this.fbUnsubscribe = null;
-                this.isGuestInFullEditMode = false;
+                this.sessionCode = null;
+                this.selectedPaymentMethod = 'InstaPay';
+                this.currentEditingParticipantId = null;
+                this.firestoreUnsubscribe = null;
+                this.user = null;
+                this.activeCategory = 'all';
 
                 this.sessionData = {
+                    sessionCode: '',
                     restaurantName: '',
                     adminName: '',
                     menuUrl: '',
                     menuImage: null,
                     deliveryFee: 0,
                     serviceFee: 0,
-                    taxType: 'fixed', // 'fixed' or 'percent'
-                    splitMethod: 'equal', // 'equal' or 'proportional'
+                    taxType: 'fixed',
+                    splitMethod: 'equal',
                     isLocked: false,
                     createdAt: null,
                     presets: [],
                     participants: []
                 };
 
-                this.initBroadcastChannel();
+                this.initAuth();
                 window.addEventListener('hashchange', () => this.handleRouting());
-                window.addEventListener('storage', (e) => this.handleStorageEvent(e));
                 
                 document.addEventListener('DOMContentLoaded', () => {
+                    this.renderRecommendations();
                     lucide.createIcons();
                     this.handleRouting();
                 });
             }
 
-            initBroadcastChannel() {
+            async initAuth() {
                 try {
-                    this.broadcastChannel = new BroadcastChannel('food_order_sync');
-                    this.broadcastChannel.onmessage = (event) => {
-                        if (event.data && event.data.sessionId === this.sessionId) {
-                            this.sessionData = event.data.sessionData;
-                            this.renderCurrentView();
-                        }
-                    };
+                    const userCredential = await signInAnonymously(auth);
+                    this.user = userCredential.user;
+                    this.updateSyncBadge('Connected: Firestore Live', 'bg-emerald-500');
+                    if (this.sessionCode && !this.firestoreUnsubscribe) {
+                        this.bindFirestoreListener(this.sessionCode);
+                    }
                 } catch (e) {
-                    console.log("BroadcastChannel unavailable");
+                    console.error("Firebase auth error:", e);
+                    this.updateSyncBadge('Sync Offline', 'bg-rose-500');
                 }
             }
 
-            handleStorageEvent(e) {
-                if (e.key === `food_session_${this.sessionId}` && e.newValue) {
-                    try {
-                        this.sessionData = JSON.parse(e.newValue);
-                        this.renderCurrentView();
-                    } catch (err) {}
+            updateSyncBadge(text, dotColorClass) {
+                const syncStatusText = document.getElementById('sync-status-text');
+                const syncDot = document.getElementById('sync-dot');
+                if (syncStatusText) syncStatusText.innerText = text;
+                if (syncDot) syncDot.className = `w-2 h-2 rounded-full ${dotColorClass} animate-pulse`;
+            }
+
+            getFirestoreSessionDoc(code) {
+                return doc(db, 'food_orders_sessions', code.toUpperCase());
+            }
+
+            bindFirestoreListener(code) {
+                if (this.firestoreUnsubscribe) {
+                    this.firestoreUnsubscribe();
+                    this.firestoreUnsubscribe = null;
+                }
+
+                if (!this.user) return;
+
+                const docRef = this.getFirestoreSessionDoc(code);
+                this.firestoreUnsubscribe = onSnapshot(docRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const remoteData = docSnap.data();
+                        this.sessionData = remoteData;
+                        this.saveSessionToLocalArchive(false);
+                        this.renderSessionBoard();
+                        this.updateSyncBadge('Connected: Firestore Live', 'bg-emerald-500');
+                    } else {
+                        const localData = this.getLocalSession(code);
+                        if (localData) {
+                            this.sessionData = localData;
+                            this.saveSessionDataToFirestore();
+                        } else {
+                            this.showToast(`Session ${code} not found on cloud`, 'info');
+                        }
+                    }
+                }, (error) => {
+                    console.error("Firestore listen error:", error);
+                    this.updateSyncBadge('Reconnecting Firestore...', 'bg-amber-500');
+                });
+            }
+
+            async saveSessionDataToFirestore() {
+                if (!this.sessionCode) return;
+                try {
+                    const docRef = this.getFirestoreSessionDoc(this.sessionCode);
+                    await setDoc(docRef, this.sessionData, { merge: true });
+                } catch (err) {
+                    console.error("Error writing session to Firestore:", err);
+                    this.showToast('Failed to sync changes with cloud database', 'error');
                 }
             }
 
-            // -------------------------------------------------------------
-            // DYNAMIC UNIQUE SHARE LINK GENERATOR
-            // -------------------------------------------------------------
-            generateUniqueShareURL(mode = 'guest', token = null) {
-                const uniqueShareToken = 'share_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6);
+            generateShortCode() {
+                const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+                let code = '';
+                for (let i = 0; i < 6; i++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return code;
+            }
+
+            getUniversalShareURL() {
+                return `${window.location.origin}${window.location.pathname}#session=${this.sessionCode}`;
+            }
+
+            copyUniversalShareLink() {
+                const url = this.getUniversalShareURL();
+                this.fallbackCopyText(url);
+                this.showToast('Copied universal link! Send to your group.', 'success');
+            }
+
+            copySessionCode() {
+                if (this.sessionCode) {
+                    this.fallbackCopyText(this.sessionCode);
+                    this.showToast(`Copied code: ${this.sessionCode}`, 'success');
+                }
+            }
+
+            joinByCode() {
+                const input = document.getElementById('join-code-input').value.trim().toUpperCase();
+                if (!input || input.length < 3) {
+                    this.showToast('Please enter a valid session code', 'error');
+                    return;
+                }
+                window.location.hash = `#session=${input}`;
+            }
+
+            // ==========================================
+            // RESTAURANTS RECOMMENDATION ENGINE
+            // ==========================================
+
+            renderRecommendations() {
+                const filterContainer = document.getElementById('category-filters-container');
+                const gridContainer = document.getElementById('restaurants-grid');
+                if (!filterContainer || !gridContainer) return;
+
+                const categories = [
+                    { id: 'all', label: 'All Places' },
+                    { id: 'authentic', label: 'Classic Egyptian' },
+                    { id: 'street', label: 'Street Food & Shawarma' },
+                    { id: 'grilled', label: 'Kebab & Grills' },
+                    { id: 'burgers', label: 'Burgers' },
+                    { id: 'breakfast', label: 'Foul & Breakfast' }
+                ];
+
+                filterContainer.innerHTML = categories.map(cat => {
+                    const isActive = this.activeCategory === cat.id;
+                    const btnClass = isActive 
+                        ? 'bg-yumara-600 text-white font-bold border-yumara-600 shadow-sm'
+                        : 'bg-white text-forest-800 border-cream-300 hover:bg-cream-100 font-semibold';
+
+                    return `
+                        <button type="button" onclick="app.setRecommendationCategory('${cat.id}')" 
+                                class="px-3 py-1.5 rounded-xl text-xs border transition-colors ${btnClass}">
+                            ${cat.label}
+                        </button>
+                    `;
+                }).join('');
+
+                const filtered = this.activeCategory === 'all'
+                    ? EGYPT_RESTAURANTS
+                    : EGYPT_RESTAURANTS.filter(r => r.category === this.activeCategory);
+
+                gridContainer.innerHTML = filtered.map(r => `
+                    <div class="bg-white rounded-2xl p-5 border border-cream-300 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden group">
+                        <div class="space-y-3">
+                            <div class="flex items-start justify-between gap-2">
+                                <div>
+                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wide bg-yumara-100 text-yumara-800 border border-yumara-200">
+                                        ${r.cuisine}
+                                    </span>
+                                    <h4 class="font-extrabold text-forest-800 text-base sm:text-lg mt-1 tracking-tight group-hover:text-yumara-700 transition-colors">
+                                        ${r.name}
+                                    </h4>
+                                </div>
+                                <div class="flex items-center space-x-1 bg-amber-50 text-amber-900 border border-amber-200 px-2 py-1 rounded-lg text-xs font-black">
+                                    <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400 text-amber-500"></i>
+                                    <span>${r.rating}</span>
+                                </div>
+                            </div>
+
+                            <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-yumara-600 shrink-0"></i>
+                                <span class="truncate">${r.areas}</span>
+                            </p>
+
+                            <!-- Highlights -->
+                            <div class="pt-1">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Famous For:</span>
+                                <div class="flex flex-wrap gap-1">
+                                    ${r.highlights.map(h => `
+                                        <span class="text-[11px] font-medium bg-cream-100 text-forest-800 px-2 py-0.5 rounded-md border border-cream-200">
+                                            ${h}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer with Info & Quick Start Button -->
+                        <div class="pt-4 mt-4 border-t border-cream-200 space-y-3">
+                            <div class="flex justify-between items-center text-xs">
+                                <div>
+                                    <span class="text-slate-400 block text-[10px] font-semibold">Avg. Price / Person</span>
+                                    <span class="font-extrabold text-forest-800">${r.avgPrice}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-slate-400 block text-[10px] font-semibold">Est. Delivery</span>
+                                    <span class="font-bold text-yumara-700">~${r.deliveryFee} EGP</span>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <button onclick="app.startOrderFromRecommendation('${r.id}')" class="flex-1 py-2 px-3 bg-yumara-600 hover:bg-yumara-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center space-x-1.5">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                    <span>Order From Here</span>
+                                </button>
+                                ${r.menuUrl ? `
+                                    <a href="${r.menuUrl}" target="_blank" rel="noopener noreferrer" class="p-2 bg-cream-100 hover:bg-cream-200 text-forest-800 border border-cream-300 rounded-xl flex items-center justify-center transition-colors" title="View official menu">
+                                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                                    </a>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                lucide.createIcons();
+            }
+
+            setRecommendationCategory(catId) {
+                this.activeCategory = catId;
+                this.renderRecommendations();
+            }
+
+            startOrderFromRecommendation(restId) {
+                const rest = EGYPT_RESTAURANTS.find(item => item.id === restId);
+                if (!rest) return;
+
+                // Prefill Create Modal with Egyptian restaurant specifics & presets
+                document.getElementById('create-restaurant-name').value = rest.name;
+                document.getElementById('create-delivery-fee').value = rest.deliveryFee || 25;
+                document.getElementById('create-service-fee').value = 0;
+                document.getElementById('create-menu-url').value = rest.menuUrl || '';
                 
-                const payload = encodeURIComponent(JSON.stringify({
-                    r: this.sessionData.restaurantName,
-                    a: this.sessionData.adminName,
-                    u: this.sessionData.menuUrl,
-                    d: this.sessionData.deliveryFee,
-                    s: this.sessionData.serviceFee,
-                    t: this.sessionData.taxType,
-                    m: this.sessionData.splitMethod,
-                    l: this.sessionData.isLocked,
-                    st: uniqueShareToken
-                }));
+                // Store serialized presets in hidden input
+                document.getElementById('create-prefill-presets').value = JSON.stringify(rest.presets || []);
 
-                let url = `${window.location.origin}${window.location.pathname}#session=${this.sessionId}&mode=${mode}&share_token=${uniqueShareToken}&state=${payload}`;
-                if (token) {
-                    url += `&token=${token}`;
-                }
-                return url;
+                this.showCreateSessionModal();
+                this.showToast(`Selected ${rest.name}! Enter your name to launch.`, 'info');
             }
 
-            generateAndCopyFreshGuestLink() {
-                const url = this.generateUniqueShareURL('guest');
-                this.fallbackCopyText(url);
-                this.showToast('Generated fresh unique share link!', 'success');
-            }
+            // ==========================================
+            // SESSION CREATION & SYNC
+            // ==========================================
 
-            generateAndCopyPersonalLink() {
-                let currentToken = this.userToken;
-                if (!currentToken) {
-                    currentToken = 'tok_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6);
-                    this.userToken = currentToken;
-                }
-
-                const url = this.generateUniqueShareURL('guest', currentToken);
-                document.getElementById('personal-link-input').value = url;
-                this.fallbackCopyText(url);
-                this.showToast('Generated & copied personal edit link!', 'success');
-            }
-
-            // -------------------------------------------------------------
-            // SESSION CREATION & STATE ENCODING
-            // -------------------------------------------------------------
             async handleCreateSession(event) {
                 if (event) event.preventDefault();
                 
@@ -685,36 +1026,42 @@
                     const menuUrl = document.getElementById('create-menu-url').value.trim();
                     const deliveryFee = parseFloat(document.getElementById('create-delivery-fee').value) || 0;
                     const serviceFee = parseFloat(document.getElementById('create-service-fee').value) || 0;
-                    const fileInput = document.getElementById('create-menu-file');
-
-                    let menuImageData = null;
-                    if (fileInput && fileInput.files && fileInput.files[0]) {
-                        menuImageData = await this.readFileAsBase64(fileInput.files[0]);
+                    
+                    let initialPresets = [];
+                    const prefilledPresetsStr = document.getElementById('create-prefill-presets').value;
+                    if (prefilledPresetsStr) {
+                        try {
+                            initialPresets = JSON.parse(prefilledPresetsStr);
+                        } catch (e) {}
                     }
 
-                    this.sessionId = 'sess_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6);
+                    this.sessionCode = this.generateShortCode();
 
                     this.sessionData = {
+                        sessionCode: this.sessionCode,
                         restaurantName: restName,
                         adminName: adminName,
                         menuUrl: menuUrl,
-                        menuImage: menuImageData,
+                        menuImage: null,
                         deliveryFee: deliveryFee,
                         serviceFee: serviceFee,
                         taxType: 'fixed',
                         splitMethod: 'equal',
                         isLocked: false,
                         createdAt: new Date().toISOString(),
-                        presets: [],
+                        presets: initialPresets,
                         participants: []
                     };
 
-                    this.saveSessionToLocalStorage();
-                    this.syncToFirebase().catch(() => {});
+                    this.saveSessionToLocalArchive(true);
+                    await this.saveSessionDataToFirestore();
+
+                    // Clear prefilled hidden field
+                    document.getElementById('create-prefill-presets').value = '';
 
                     this.closeModal('modal-create-session');
-                    this.updateURLHash('admin');
-                    this.showToast('Live Group Order created successfully!', 'success');
+                    window.location.hash = `#session=${this.sessionCode}`;
+                    this.showToast(`Group order ${this.sessionCode} created!`, 'success');
 
                 } catch (err) {
                     console.error('Session creation error:', err);
@@ -728,109 +1075,57 @@
                 }
             }
 
-            updateURLHash(viewMode, token = null) {
-                const url = this.generateUniqueShareURL(viewMode, token);
-                window.location.href = url;
-            }
-
-            async saveSessionData() {
-                this.saveSessionToLocalStorage();
-
-                if (this.broadcastChannel) {
-                    this.broadcastChannel.postMessage({
-                        sessionId: this.sessionId,
-                        sessionData: this.sessionData
-                    });
-                }
-
-                await this.syncToFirebase();
-            }
-
-            saveSessionToLocalStorage() {
+            getLocalSession(code) {
                 try {
-                    localStorage.setItem(`food_session_${this.sessionId}`, JSON.stringify(this.sessionData));
+                    const localData = localStorage.getItem(`food_session_${code}`);
+                    return localData ? JSON.parse(localData) : null;
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            saveSessionToLocalArchive(updateArchiveList = true) {
+                try {
+                    localStorage.setItem(`food_session_${this.sessionCode}`, JSON.stringify(this.sessionData));
                     
-                    const history = JSON.parse(localStorage.getItem('food_sessions_archive') || '[]');
-                    const existingIdx = history.findIndex(h => h.id === this.sessionId);
-                    const historyEntry = { id: this.sessionId, ...this.sessionData };
+                    if (updateArchiveList) {
+                        const history = JSON.parse(localStorage.getItem('food_sessions_archive') || '[]');
+                        const existingIdx = history.findIndex(h => h.sessionCode === this.sessionCode || h.id === this.sessionCode);
+                        const historyEntry = { id: this.sessionCode, ...this.sessionData };
 
-                    if (existingIdx >= 0) {
-                        history[existingIdx] = historyEntry;
-                    } else {
-                        history.unshift(historyEntry);
+                        if (existingIdx >= 0) {
+                            history[existingIdx] = historyEntry;
+                        } else {
+                            history.unshift(historyEntry);
+                        }
+
+                        localStorage.setItem('food_sessions_archive', JSON.stringify(history.slice(0, 30)));
                     }
-
-                    localStorage.setItem('food_sessions_archive', JSON.stringify(history.slice(0, 30)));
                 } catch (e) {}
             }
 
-            async syncToFirebase() {
-                if (window.firebaseStore && window.firebaseStore.db) {
-                    try {
-                        const { db, appId, doc, setDoc } = window.firebaseStore;
-                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'food_sessions', this.sessionId);
-                        await setDoc(docRef, this.sessionData, { merge: true });
-                    } catch (e) {}
-                }
-            }
-
-            loadSessionState(sessionId, statePayload) {
-                if (statePayload) {
-                    try {
-                        const decoded = JSON.parse(decodeURIComponent(statePayload));
-                        this.sessionData.restaurantName = decoded.r || this.sessionData.restaurantName;
-                        this.sessionData.adminName = decoded.a || this.sessionData.adminName;
-                        this.sessionData.menuUrl = decoded.u || this.sessionData.menuUrl;
-                        this.sessionData.deliveryFee = decoded.d || 0;
-                        this.sessionData.serviceFee = decoded.s || 0;
-                        this.sessionData.taxType = decoded.t || 'fixed';
-                        this.sessionData.splitMethod = decoded.m || 'equal';
-                        this.sessionData.isLocked = !!decoded.l;
-                    } catch (e) {}
-                }
-
-                const localData = localStorage.getItem(`food_session_${sessionId}`);
+            loadSessionState(code) {
+                const localData = this.getLocalSession(code);
                 if (localData) {
-                    try {
-                        this.sessionData = JSON.parse(localData);
-                    } catch (e) {}
+                    this.sessionData = localData;
                 }
-
-                if (window.firebaseStore && window.firebaseStore.db) {
-                    try {
-                        const { db, appId, doc, onSnapshot } = window.firebaseStore;
-                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'food_sessions', sessionId);
-                        
-                        if (this.fbUnsubscribe) this.fbUnsubscribe();
-                        this.fbUnsubscribe = onSnapshot(docRef, (snap) => {
-                            if (snap.exists()) {
-                                this.sessionData = snap.data();
-                                this.saveSessionToLocalStorage();
-                                this.renderCurrentView();
-                            }
-                        }, () => {});
-                    } catch (e) {}
-                }
+                this.bindFirestoreListener(code);
             }
 
-            // -------------------------------------------------------------
-            // ROUTING & VIEW SWITCHING
-            // -------------------------------------------------------------
             handleRouting() {
                 const hash = window.location.hash.substring(1);
                 const params = new URLSearchParams(hash);
-                const sessId = params.get('session');
-                const viewMode = params.get('mode');
-                const statePayload = params.get('state');
-                const token = params.get('token');
+                const code = params.get('session');
 
-                if (sessId) {
-                    this.sessionId = sessId;
-                    this.userToken = token || null;
-                    this.mode = (viewMode === 'admin') ? 'admin' : 'guest';
-                    this.loadSessionState(this.sessionId, statePayload);
-                    this.renderCurrentView();
+                if (code) {
+                    this.sessionCode = code.toUpperCase();
+                    this.loadSessionState(this.sessionCode);
+                    this.renderSessionBoard();
                 } else {
+                    if (this.firestoreUnsubscribe) {
+                        this.firestoreUnsubscribe();
+                        this.firestoreUnsubscribe = null;
+                    }
                     this.showLandingView();
                 }
             }
@@ -841,23 +1136,11 @@
             }
 
             showLandingView() {
-                this.mode = 'landing';
                 document.getElementById('view-landing').classList.remove('hidden');
-                document.getElementById('view-participant').classList.add('hidden');
-                document.getElementById('view-admin').classList.add('hidden');
+                document.getElementById('view-session').classList.add('hidden');
+                this.renderRecommendations();
             }
 
-            renderCurrentView() {
-                if (this.mode === 'admin') {
-                    this.renderAdminView();
-                } else if (this.mode === 'guest') {
-                    this.renderParticipantView();
-                }
-            }
-
-            // -------------------------------------------------------------
-            // TAX & DELIVERY BREAKDOWN CALCULATIONS ENGINE
-            // -------------------------------------------------------------
             computeBreakdowns() {
                 const participants = this.sessionData.participants || [];
                 const count = participants.length;
@@ -914,31 +1197,33 @@
                 };
             }
 
-            // -------------------------------------------------------------
-            // PARTICIPANT / GUEST VIEW & EDITING LOGIC
-            // -------------------------------------------------------------
-            renderParticipantView() {
+            renderSessionBoard() {
                 document.getElementById('view-landing').classList.add('hidden');
-                document.getElementById('view-admin').classList.add('hidden');
-                document.getElementById('view-participant').classList.remove('hidden');
+                document.getElementById('view-session').classList.remove('hidden');
 
-                document.getElementById('guest-restaurant-name').innerText = this.sessionData.restaurantName || 'Restaurant Order';
-                document.getElementById('guest-session-admin').innerText = `Organized by ${this.sessionData.adminName || 'Admin'}`;
+                document.getElementById('session-code-display').innerText = this.sessionCode;
+                document.getElementById('session-restaurant-name').innerText = this.sessionData.restaurantName || 'Restaurant Order';
+                document.getElementById('session-organizer-info').innerText = `Organized by ${this.sessionData.adminName || 'Organizer'}`;
 
-                const statusEl = document.getElementById('guest-lock-status');
+                const lockBadge = document.getElementById('session-lock-badge');
+                const lockBtnText = document.getElementById('admin-lock-btn-text');
+                const submitBtn = document.getElementById('btn-submit-order');
+
                 if (this.sessionData.isLocked) {
-                    statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span> Orders Locked`;
-                    statusEl.className = 'text-xs font-bold text-rose-600 flex items-center gap-1';
-                    document.getElementById('guest-submit-btn').disabled = true;
-                    document.getElementById('guest-submit-btn').classList.add('opacity-50', 'cursor-not-allowed');
+                    lockBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span> Locked`;
+                    lockBadge.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1';
+                    lockBtnText.innerText = 'Unlock Orders';
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
                 } else {
-                    statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live & Open`;
-                    statusEl.className = 'text-xs font-bold text-emerald-600 flex items-center gap-1';
-                    document.getElementById('guest-submit-btn').disabled = false;
-                    document.getElementById('guest-submit-btn').classList.remove('opacity-50', 'cursor-not-allowed');
+                    lockBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live &amp; Open`;
+                    lockBadge.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1';
+                    lockBtnText.innerText = 'Lock Orders';
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 }
 
-                const linkBtn = document.getElementById('guest-menu-link-btn');
+                const linkBtn = document.getElementById('session-menu-link-btn');
                 if (this.sessionData.menuUrl) {
                     linkBtn.href = this.sessionData.menuUrl;
                     linkBtn.classList.remove('hidden');
@@ -946,52 +1231,37 @@
                     linkBtn.classList.add('hidden');
                 }
 
-                const imgBtn = document.getElementById('guest-menu-img-btn');
+                const imgBtn = document.getElementById('session-menu-img-btn');
                 if (this.sessionData.menuImage) {
                     imgBtn.classList.remove('hidden');
                 } else {
                     imgBtn.classList.add('hidden');
                 }
 
-                this.renderGuestPresets();
+                const delInput = document.getElementById('admin-input-delivery');
+                if (document.activeElement !== delInput) {
+                    delInput.value = this.sessionData.deliveryFee || '';
+                }
+                const taxInput = document.getElementById('admin-input-tax');
+                if (document.activeElement !== taxInput) {
+                    taxInput.value = this.sessionData.serviceFee || '';
+                }
+                document.getElementById('admin-select-split').value = this.sessionData.splitMethod || 'equal';
+                this.updateTaxTypeUI(this.sessionData.taxType || 'fixed');
 
-                // Setup personal edit link input
-                const personalInput = document.getElementById('personal-link-input');
-                personalInput.value = this.generateUniqueShareURL('guest', this.userToken || 'tok_' + Math.random().toString(36).substring(2, 8));
+                this.renderPresets();
+                this.renderOrdersStream();
 
-                if (this.userToken) {
-                    this.loadParticipantByToken(this.userToken);
-                } else {
-                    const container = document.getElementById('guest-items-list');
-                    if (container.children.length === 0) {
-                        this.addGuestItemRow();
-                    }
+                if (document.getElementById('board-items-inputs').children.length === 0) {
+                    this.addBoardItemRow();
                 }
 
-                this.checkExistingColleagueName();
-                this.calculateGuestTotal();
                 lucide.createIcons();
             }
 
-            loadParticipantByToken(token) {
-                const participant = (this.sessionData.participants || []).find(p => p.token === token || p.id === token);
-                if (!participant) return;
-
-                document.getElementById('guest-name-input').value = participant.name || '';
-                
-                const container = document.getElementById('guest-items-list');
-                container.innerHTML = '';
-
-                (participant.items || []).forEach(item => {
-                    this.addGuestItemRow(item.name, item.price, item.qty);
-                });
-
-                this.isGuestInFullEditMode = true;
-            }
-
-            renderGuestPresets() {
-                const wrapper = document.getElementById('guest-presets-wrapper');
-                const list = document.getElementById('guest-presets-list');
+            renderPresets() {
+                const wrapper = document.getElementById('board-presets-wrapper');
+                const list = document.getElementById('board-presets-list');
                 const presets = this.sessionData.presets || [];
 
                 if (presets.length === 0) {
@@ -1001,7 +1271,7 @@
 
                 wrapper.classList.remove('hidden');
                 list.innerHTML = presets.map(p => `
-                    <button type="button" onclick="app.addGuestPresetItem('${this.escapeHtml(p.name)}', ${p.price})" class="px-2.5 py-1 bg-cream-200 hover:bg-cream-300 text-forest-800 border border-cream-300 rounded-lg text-xs font-bold flex items-center space-x-1 transition-colors">
+                    <button type="button" onclick="app.addPresetToActiveInputs('${this.escapeHtml(p.name)}', ${p.price})" class="px-2.5 py-1 bg-cream-200 hover:bg-cream-300 text-forest-800 border border-cream-300 rounded-lg text-xs font-bold flex items-center space-x-1 transition-colors">
                         <span>${this.escapeHtml(p.name)}</span>
                         <span class="text-yumara-700 font-extrabold">(${p.price} EGP)</span>
                         <i data-lucide="plus" class="w-3 h-3 text-yumara-600"></i>
@@ -1010,243 +1280,40 @@
                 lucide.createIcons();
             }
 
-            addGuestPresetItem(name, price) {
-                this.addGuestItemRow(name, price, 1);
-                this.calculateGuestTotal();
-                this.showToast(`Added ${name} to your items`, 'info');
-            }
-
-            addGuestItemRow(name = '', price = '', qty = 1) {
-                const container = document.getElementById('guest-items-list');
-                const rowId = 'guest_item_' + Math.random().toString(36).substring(2, 7);
-
-                const row = document.createElement('div');
-                row.id = rowId;
-                row.className = 'flex items-center space-x-2 bg-cream-50 p-2 rounded-xl border border-cream-300';
-                row.innerHTML = `
-                    <input type="text" placeholder="Food item name" value="${this.escapeHtml(name)}" oninput="app.calculateGuestTotal()" class="item-name-input flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-cream-300 bg-white font-medium text-forest-800">
-                    <input type="number" placeholder="Price" min="0" step="0.5" value="${price}" oninput="app.calculateGuestTotal()" class="item-price-input w-20 text-xs px-2.5 py-1.5 rounded-lg border border-cream-300 bg-white font-bold text-forest-800">
-                    <div class="flex items-center space-x-1">
-                        <span class="text-[10px] text-slate-400 font-bold">x</span>
-                        <input type="number" min="1" value="${qty}" oninput="app.calculateGuestTotal()" class="item-qty-input w-12 text-xs px-2 py-1.5 rounded-lg border border-cream-300 bg-white text-center font-bold text-forest-800">
-                    </div>
-                    <button type="button" onclick="app.removeGuestItemRow('${rowId}')" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                `;
-                container.appendChild(row);
-                lucide.createIcons();
-            }
-
-            removeGuestItemRow(rowId) {
-                const el = document.getElementById(rowId);
-                if (el) el.remove();
-                this.calculateGuestTotal();
-            }
-
-            calculateGuestTotal() {
-                const rows = document.querySelectorAll('#guest-items-list > div');
-                let itemsSubtotal = 0;
-
-                rows.forEach(row => {
-                    const price = parseFloat(row.querySelector('.item-price-input').value) || 0;
-                    const qty = parseInt(row.querySelector('.item-qty-input').value) || 1;
-                    itemsSubtotal += price * qty;
-                });
-
-                const count = Math.max((this.sessionData.participants || []).length, 1);
-                const deliveryTotal = this.sessionData.deliveryFee || 0;
-                const splitMethod = this.sessionData.splitMethod || 'equal';
-                const taxType = this.sessionData.taxType || 'fixed';
-                const serviceVal = this.sessionData.serviceFee || 0;
-
-                let deliveryShare = 0;
-                let taxShare = 0;
-
-                if (splitMethod === 'proportional') {
-                    const currentBreakdowns = this.computeBreakdowns();
-                    const groupSub = currentBreakdowns.groupSubtotal + itemsSubtotal;
-                    
-                    if (groupSub > 0) {
-                        const ratio = itemsSubtotal / groupSub;
-                        deliveryShare = ratio * deliveryTotal;
-                        
-                        const totalTaxEgp = (taxType === 'percent') ? (groupSub * serviceVal) / 100 : serviceVal;
-                        taxShare = ratio * totalTaxEgp;
-                    }
-                } else {
-                    deliveryShare = deliveryTotal / count;
-                    if (taxType === 'percent') {
-                        const totalTaxEgp = ((this.computeBreakdowns().groupSubtotal + itemsSubtotal) * serviceVal) / 100;
-                        taxShare = totalTaxEgp / count;
-                    } else {
-                        taxShare = serviceVal / count;
+            addPresetToActiveInputs(name, price) {
+                // If the first row is empty, fill it. Otherwise add new row.
+                const firstRow = document.querySelector('#board-items-inputs > div');
+                if (firstRow) {
+                    const nameInp = firstRow.querySelector('.item-name-input');
+                    const priceInp = firstRow.querySelector('.item-price-input');
+                    if (nameInp && !nameInp.value.trim() && (!priceInp.value || priceInp.value == 0)) {
+                        nameInp.value = name;
+                        priceInp.value = price;
+                        return;
                     }
                 }
-
-                const grandTotal = itemsSubtotal + deliveryShare + taxShare;
-
-                document.getElementById('calc-guest-subtotal').innerText = itemsSubtotal.toFixed(2) + ' EGP';
-                document.getElementById('calc-guest-delivery-share').innerText = deliveryShare.toFixed(2) + ' EGP';
-                document.getElementById('calc-guest-tax-share').innerText = taxShare.toFixed(2) + ' EGP';
-                document.getElementById('calc-guest-tax-mode-label').innerText = taxType === 'percent' ? `${serviceVal}%` : 'Fixed';
-                document.getElementById('calc-guest-split-info').innerText = `Split Mode: ${splitMethod === 'proportional' ? 'Proportional by subtotal' : 'Equal per participant'}`;
-                document.getElementById('calc-guest-grandtotal').innerText = grandTotal.toFixed(2) + ' EGP';
+                this.addBoardItemRow(name, price, 1);
             }
 
-            checkExistingColleagueName() {
-                const nameInput = document.getElementById('guest-name-input').value.trim().toLowerCase();
-                const btnText = document.getElementById('guest-submit-btn-text');
-                const editingIndicator = document.getElementById('guest-editing-indicator');
-
-                if (!nameInput) {
-                    btnText.innerText = 'Submit Order to Group';
-                    editingIndicator.classList.add('hidden');
-                    return;
-                }
-
-                const existingOrder = (this.sessionData.participants || []).find(p => p.name.toLowerCase() === nameInput || (p.token && p.token === this.userToken));
-
-                if (existingOrder) {
-                    btnText.innerText = 'Save / Update Order';
-                    editingIndicator.classList.remove('hidden');
-                } else {
-                    btnText.innerText = 'Submit Order to Group';
-                    editingIndicator.classList.add('hidden');
-                }
-            }
-
-            async submitGuestOrder() {
-                if (this.sessionData.isLocked) {
-                    this.showToast('Orders are locked by the admin', 'error');
-                    return;
-                }
-
-                const nameInput = document.getElementById('guest-name-input').value.trim();
-                if (!nameInput) {
-                    this.showToast('Please enter your name', 'error');
-                    return;
-                }
-
-                const rows = document.querySelectorAll('#guest-items-list > div');
-                const submittedItems = [];
-
-                rows.forEach(row => {
-                    const name = row.querySelector('.item-name-input').value.trim();
-                    const price = parseFloat(row.querySelector('.item-price-input').value) || 0;
-                    const qty = parseInt(row.querySelector('.item-qty-input').value) || 1;
-
-                    if (name && price >= 0) {
-                        submittedItems.push({ name, price, qty });
-                    }
-                });
-
-                if (submittedItems.length === 0) {
-                    this.showToast('Please add at least one item name and price', 'error');
-                    return;
-                }
-
-                const participants = [...(this.sessionData.participants || [])];
-                
-                // Find by token or name
-                let existingIndex = -1;
-                if (this.userToken) {
-                    existingIndex = participants.findIndex(p => p.token === this.userToken || p.id === this.userToken);
-                }
-                if (existingIndex < 0) {
-                    existingIndex = participants.findIndex(p => p.name.toLowerCase() === nameInput.toLowerCase());
-                }
-
-                let currentToken = this.userToken || 'tok_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6);
-
-                if (existingIndex >= 0) {
-                    participants[existingIndex].name = nameInput;
-                    participants[existingIndex].items = submittedItems;
-                    participants[existingIndex].token = participants[existingIndex].token || currentToken;
-                    currentToken = participants[existingIndex].token;
-                    this.showToast('Your order has been updated successfully!', 'success');
-                } else {
-                    participants.push({
-                        id: 'part_' + Date.now().toString(36),
-                        token: currentToken,
-                        name: nameInput,
-                        items: submittedItems,
-                        isPaid: false
-                    });
-                    this.showToast('Order submitted successfully!', 'success');
-                }
-
-                this.userToken = currentToken;
-                this.sessionData.participants = participants;
-                await this.saveSessionData();
-
-                const personalUrl = this.generateUniqueShareURL('guest', currentToken);
-                document.getElementById('personal-link-input').value = personalUrl;
-
-                this.checkExistingColleagueName();
-            }
-
-            // -------------------------------------------------------------
-            // ADMIN DASHBOARD & CONTROLS
-            // -------------------------------------------------------------
-            renderAdminView() {
-                document.getElementById('view-landing').classList.add('hidden');
-                document.getElementById('view-participant').classList.add('hidden');
-                document.getElementById('view-admin').classList.remove('hidden');
-
-                document.getElementById('admin-restaurant-name').innerText = this.sessionData.restaurantName || 'Restaurant Order';
-                document.getElementById('admin-session-date').innerText = new Date(this.sessionData.createdAt || Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-
-                const lockText = document.getElementById('admin-lock-btn-text');
-                const statusBadge = document.getElementById('admin-status-badge');
-                if (this.sessionData.isLocked) {
-                    lockText.innerText = 'Unlock Orders';
-                    statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span> Locked`;
-                    statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1';
-                } else {
-                    lockText.innerText = 'Lock Orders';
-                    statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live & Open`;
-                    statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1';
-                }
-
-                document.getElementById('admin-delivery-fee').value = this.sessionData.deliveryFee || '';
-                document.getElementById('admin-service-fee').value = this.sessionData.serviceFee || '';
-                document.getElementById('admin-split-method').value = this.sessionData.splitMethod || 'equal';
-                this.updateTaxTypeUI(this.sessionData.taxType || 'fixed');
-
-                this.renderAdminParticipantsList();
-                lucide.createIcons();
-            }
-
-            setTaxType(type) {
-                this.sessionData.taxType = type;
-                this.updateTaxTypeUI(type);
-                this.updateFeesFromAdmin();
-            }
-
-            updateTaxTypeUI(type) {
-                const fixedBtn = document.getElementById('tax-type-fixed');
-                const percentBtn = document.getElementById('tax-type-percent');
-
-                if (type === 'percent') {
-                    percentBtn.className = 'py-1.5 text-xs font-bold rounded-lg border border-yumara-600 bg-yumara-50 text-yumara-700';
-                    fixedBtn.className = 'py-1.5 text-xs font-bold rounded-lg border border-cream-300 bg-cream-100 text-forest-800';
-                } else {
-                    fixedBtn.className = 'py-1.5 text-xs font-bold rounded-lg border border-yumara-600 bg-yumara-50 text-yumara-700';
-                    percentBtn.className = 'py-1.5 text-xs font-bold rounded-lg border border-cream-300 bg-cream-100 text-forest-800';
-                }
-            }
-
-            renderAdminParticipantsList() {
-                const container = document.getElementById('admin-participants-list');
-                const countBadge = document.getElementById('admin-participant-count');
-
+            renderOrdersStream() {
+                const container = document.getElementById('board-orders-list');
+                const countBadge = document.getElementById('board-participants-count');
                 const breakdown = this.computeBreakdowns();
+
                 countBadge.innerText = `${breakdown.count} Order${breakdown.count === 1 ? '' : 's'}`;
 
+                document.getElementById('summary-subtotal').innerText = breakdown.groupSubtotal.toFixed(2) + ' EGP';
+                document.getElementById('summary-delivery').innerText = breakdown.deliveryTotal.toFixed(2) + ' EGP';
+                document.getElementById('summary-tax').innerText = breakdown.totalTaxEgp.toFixed(2) + ' EGP';
+                document.getElementById('summary-grandtotal').innerText = breakdown.grandTotalBill.toFixed(2) + ' EGP';
+
+                const splitDesc = this.sessionData.splitMethod === 'proportional'
+                    ? 'Delivery & taxes split proportionally based on food subtotal.'
+                    : 'Delivery & taxes split equally among all members.';
+                document.getElementById('summary-split-explanation').innerText = splitDesc;
+
                 if (breakdown.count === 0) {
-                    container.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">No orders submitted yet. Click "Generate Unique Share Link" above to send to colleagues!</p>`;
-                    this.updateAdminSummaryDisplay(0, 0, 0, 0);
+                    container.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">No orders submitted yet. Enter your name and items above to place the first order!</p>`;
                     return;
                 }
 
@@ -1255,7 +1322,10 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 <span class="font-extrabold text-sm text-forest-800">${this.escapeHtml(p.name)}</span>
-                                <button onclick="app.togglePaymentStatus('${p.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold ${p.isPaid ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-rose-100 text-rose-800 border border-rose-200'}">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${p.paymentMethod === 'Cash' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-blue-100 text-blue-800 border border-blue-200'}">
+                                    ${p.paymentMethod || 'InstaPay'}
+                                </span>
+                                <button onclick="app.togglePaymentStatus('${p.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold transition-transform active:scale-95 ${p.isPaid ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-rose-100 text-rose-800 border border-rose-200'}">
                                     ${p.isPaid ? 'PAID ✓' : 'UNPAID'}
                                 </button>
                             </div>
@@ -1276,15 +1346,11 @@
                         </div>
 
                         <div class="flex justify-end items-center space-x-2 text-[11px]">
-                            <button onclick="app.copyColleaguePersonalLink('${p.id}')" class="text-yumara-700 hover:text-yumara-800 font-bold inline-flex items-center space-x-1 bg-yumara-50 px-2 py-1 rounded-md border border-yumara-200" title="Copy colleague personal edit link">
-                                <i data-lucide="link-2" class="w-3 h-3"></i>
-                                <span>Copy Personal Link</span>
-                            </button>
-                            <button onclick="app.openAdminEditModal('${p.id}')" class="text-forest-800 hover:text-forest-900 font-bold inline-flex items-center space-x-1 bg-cream-200 px-2 py-1 rounded-md border border-cream-300">
+                            <button onclick="app.editParticipantOrder('${p.id}')" class="text-forest-800 hover:text-forest-900 font-bold inline-flex items-center space-x-1 bg-cream-200 px-2.5 py-1 rounded-md border border-cream-300">
                                 <i data-lucide="pencil" class="w-3 h-3"></i>
-                                <span>Edit</span>
+                                <span>Edit This Order</span>
                             </button>
-                            <button onclick="app.removeParticipant('${p.id}')" class="text-rose-600 hover:underline font-semibold flex items-center space-x-1">
+                            <button onclick="app.promptRemoveParticipant('${p.id}')" class="text-rose-600 hover:underline font-semibold flex items-center space-x-1">
                                 <i data-lucide="trash-2" class="w-3 h-3"></i>
                                 <span>Remove</span>
                             </button>
@@ -1292,31 +1358,182 @@
                     </div>
                 `).join('');
 
-                this.updateAdminSummaryDisplay(breakdown.groupSubtotal, breakdown.deliveryTotal, breakdown.totalTaxEgp, breakdown.grandTotalBill);
+                lucide.createIcons();
             }
 
-            copyColleaguePersonalLink(participantId) {
+            setOrderPaymentMethod(method) {
+                this.selectedPaymentMethod = method;
+                const instaBtn = document.getElementById('pay-choice-instapay');
+                const cashBtn = document.getElementById('pay-choice-cash');
+
+                if (method === 'Cash') {
+                    cashBtn.className = 'py-2 px-2 text-xs font-bold rounded-xl border border-yumara-600 bg-yumara-50 text-yumara-800 flex items-center justify-center space-x-1';
+                    instaBtn.className = 'py-2 px-2 text-xs font-bold rounded-xl border border-cream-300 bg-cream-100 text-forest-800 flex items-center justify-center space-x-1';
+                } else {
+                    instaBtn.className = 'py-2 px-2 text-xs font-bold rounded-xl border border-yumara-600 bg-yumara-50 text-yumara-800 flex items-center justify-center space-x-1';
+                    cashBtn.className = 'py-2 px-2 text-xs font-bold rounded-xl border border-cream-300 bg-cream-100 text-forest-800 flex items-center justify-center space-x-1';
+                }
+            }
+
+            addBoardItemRow(name = '', price = '', qty = 1) {
+                const container = document.getElementById('board-items-inputs');
+                const rowId = 'item_row_' + Math.random().toString(36).substring(2, 7);
+
+                const row = document.createElement('div');
+                row.id = rowId;
+                row.className = 'flex items-center space-x-2 bg-cream-50 p-2 rounded-xl border border-cream-300';
+                row.innerHTML = `
+                    <input type="text" placeholder="Food item name" value="${this.escapeHtml(name)}" class="item-name-input flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-cream-300 bg-white font-medium text-forest-800 focus:outline-none focus:ring-1 focus:ring-yumara-500">
+                    <input type="number" placeholder="Price" min="0" step="0.5" value="${price}" class="item-price-input w-20 text-xs px-2.5 py-1.5 rounded-lg border border-cream-300 bg-white font-bold text-forest-800 focus:outline-none focus:ring-1 focus:ring-yumara-500">
+                    <div class="flex items-center space-x-1">
+                        <span class="text-[10px] text-slate-400 font-bold">x</span>
+                        <input type="number" min="1" value="${qty}" class="item-qty-input w-12 text-xs px-2 py-1.5 rounded-lg border border-cream-300 bg-white text-center font-bold text-forest-800 focus:outline-none focus:ring-1 focus:ring-yumara-500">
+                    </div>
+                    <button type="button" onclick="app.removeBoardItemRow('${rowId}')" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                `;
+                container.appendChild(row);
+                lucide.createIcons();
+            }
+
+            removeBoardItemRow(rowId) {
+                const el = document.getElementById(rowId);
+                if (el) el.remove();
+            }
+
+            handleNameInputCheck() {
+                const name = document.getElementById('order-input-name').value.trim().toLowerCase();
+                const btnText = document.getElementById('btn-submit-order-text');
+                const formBadge = document.getElementById('order-form-badge');
+
+                if (!this.currentEditingParticipantId) {
+                    const match = (this.sessionData.participants || []).find(p => p.name.toLowerCase() === name);
+                    if (match && name.length > 0) {
+                        btnText.innerText = `Update ${match.name}'s Order`;
+                        formBadge.classList.remove('hidden');
+                        formBadge.innerText = 'Updating Existing';
+                    } else {
+                        btnText.innerText = 'Add My Order to Board';
+                        formBadge.classList.add('hidden');
+                    }
+                }
+            }
+
+            editParticipantOrder(participantId) {
                 const p = (this.sessionData.participants || []).find(item => item.id === participantId);
                 if (!p) return;
 
-                const token = p.token || p.id;
-                const personalUrl = this.generateUniqueShareURL('guest', token);
-                this.fallbackCopyText(personalUrl);
+                this.currentEditingParticipantId = p.id;
+                document.getElementById('order-input-name').value = p.name;
+                document.getElementById('order-input-note').value = p.note || '';
+                this.setOrderPaymentMethod(p.paymentMethod || 'InstaPay');
+
+                const container = document.getElementById('board-items-inputs');
+                container.innerHTML = '';
+                (p.items || []).forEach(i => {
+                    this.addBoardItemRow(i.name, i.price, i.qty);
+                });
+
+                document.getElementById('order-form-header-title').innerText = `Editing ${p.name}'s Order`;
+                document.getElementById('btn-submit-order-text').innerText = 'Save Changes';
+                document.getElementById('order-form-badge').classList.remove('hidden');
+                document.getElementById('order-form-badge').innerText = 'Editing';
+                document.getElementById('btn-cancel-edit').classList.remove('hidden');
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            updateAdminSummaryDisplay(subtotal, delivery, tax, grandTotal) {
-                document.getElementById('admin-summary-subtotal').innerText = subtotal.toFixed(2) + ' EGP';
-                document.getElementById('admin-summary-delivery').innerText = delivery.toFixed(2) + ' EGP';
-                document.getElementById('admin-summary-service').innerText = tax.toFixed(2) + ' EGP';
-                document.getElementById('admin-summary-grandtotal').innerText = grandTotal.toFixed(2) + ' EGP';
+            resetOrderForm() {
+                this.currentEditingParticipantId = null;
+                document.getElementById('order-input-name').value = '';
+                document.getElementById('order-input-note').value = '';
+                this.setOrderPaymentMethod('InstaPay');
+
+                const container = document.getElementById('board-items-inputs');
+                container.innerHTML = '';
+                this.addBoardItemRow();
+
+                document.getElementById('order-form-header-title').innerText = 'Add or Update Your Order';
+                document.getElementById('btn-submit-order-text').innerText = 'Add My Order to Board';
+                document.getElementById('order-form-badge').classList.add('hidden');
+                document.getElementById('btn-cancel-edit').classList.add('hidden');
             }
 
-            async updateFeesFromAdmin() {
-                this.sessionData.deliveryFee = parseFloat(document.getElementById('admin-delivery-fee').value) || 0;
-                this.sessionData.serviceFee = parseFloat(document.getElementById('admin-service-fee').value) || 0;
-                this.sessionData.splitMethod = document.getElementById('admin-split-method').value;
-                await this.saveSessionData();
-                this.renderAdminParticipantsList();
+            async submitColleagueOrder() {
+                if (this.sessionData.isLocked) {
+                    this.showToast('Orders are locked for this session', 'error');
+                    return;
+                }
+
+                const name = document.getElementById('order-input-name').value.trim();
+                const note = document.getElementById('order-input-note').value.trim();
+
+                if (!name) {
+                    this.showToast('Please enter your name', 'error');
+                    return;
+                }
+
+                const rows = document.querySelectorAll('#board-items-inputs > div');
+                const items = [];
+
+                rows.forEach(row => {
+                    const nameInput = row.querySelector('.item-name-input');
+                    const priceInput = row.querySelector('.item-price-input');
+                    const qtyInput = row.querySelector('.item-qty-input');
+
+                    if (nameInput && priceInput && qtyInput) {
+                        const itemName = nameInput.value.trim();
+                        const itemPrice = parseFloat(priceInput.value) || 0;
+                        const itemQty = parseInt(qtyInput.value) || 1;
+
+                        if (itemName && itemPrice >= 0) {
+                            items.push({ name: itemName, price: itemPrice, qty: itemQty });
+                        }
+                    }
+                });
+
+                if (items.length === 0) {
+                    this.showToast('Please enter at least one food item with a price', 'error');
+                    return;
+                }
+
+                const participants = [...(this.sessionData.participants || [])];
+
+                let targetIndex = -1;
+                if (this.currentEditingParticipantId) {
+                    targetIndex = participants.findIndex(p => p.id === this.currentEditingParticipantId);
+                } else {
+                    targetIndex = participants.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+                }
+
+                let savedParticipant = null;
+
+                if (targetIndex >= 0) {
+                    participants[targetIndex].name = name;
+                    participants[targetIndex].items = items;
+                    participants[targetIndex].paymentMethod = this.selectedPaymentMethod;
+                    participants[targetIndex].note = note;
+                    savedParticipant = participants[targetIndex];
+                    this.showToast(`Updated ${name}'s order!`, 'success');
+                } else {
+                    savedParticipant = {
+                        id: 'part_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 5),
+                        name: name,
+                        items: items,
+                        paymentMethod: this.selectedPaymentMethod,
+                        note: note,
+                        isPaid: false
+                    };
+                    participants.push(savedParticipant);
+                    this.showToast(`Added ${name}'s order to the board!`, 'success');
+                }
+
+                this.sessionData.participants = participants;
+                this.saveSessionToLocalArchive(true);
+                await this.saveSessionDataToFirestore();
+
+                this.resetOrderForm();
             }
 
             async togglePaymentStatus(id) {
@@ -1325,146 +1542,67 @@
                 if (p) {
                     p.isPaid = !p.isPaid;
                     this.sessionData.participants = participants;
-                    await this.saveSessionData();
+                    this.saveSessionToLocalArchive(true);
+                    await this.saveSessionDataToFirestore();
                 }
             }
 
-            async removeParticipant(id) {
-                if (confirm('Are you sure you want to remove this colleague\'s order?')) {
-                    this.sessionData.participants = this.sessionData.participants.filter(p => p.id !== id);
-                    await this.saveSessionData();
-                    this.showToast('Order removed from session', 'info');
+            promptRemoveParticipant(id) {
+                const p = (this.sessionData.participants || []).find(x => x.id === id);
+                const name = p ? p.name : 'this order';
+                this.showConfirmDialog(`Remove Order?`, `Are you sure you want to remove ${name}'s order from the session?`, async () => {
+                    this.sessionData.participants = this.sessionData.participants.filter(item => item.id !== id);
+                    this.saveSessionToLocalArchive(true);
+                    await this.saveSessionDataToFirestore();
+                    this.showToast('Order removed', 'info');
+                    if (this.currentEditingParticipantId === id) {
+                        this.resetOrderForm();
+                    }
+                });
+            }
+
+            toggleAdminMode() {
+                const panel = document.getElementById('admin-panel');
+                panel.classList.toggle('hidden');
+                const isHidden = panel.classList.contains('hidden');
+                document.getElementById('admin-mode-toggle-text').innerText = isHidden ? 'Show Admin' : 'Admin Settings';
+            }
+
+            setTaxType(type) {
+                this.sessionData.taxType = type;
+                this.updateTaxTypeUI(type);
+                this.updateAdminFees();
+            }
+
+            updateTaxTypeUI(type) {
+                const fixedBtn = document.getElementById('tax-type-fixed');
+                const percentBtn = document.getElementById('tax-type-percent');
+
+                if (type === 'percent') {
+                    percentBtn.className = 'py-1.5 text-xs font-bold rounded-lg border border-yumara-600 bg-yumara-50 text-yumara-700';
+                    fixedBtn.className = 'py-1.5 text-xs font-bold rounded-lg border border-cream-300 bg-cream-100 text-forest-800';
+                } else {
+                    fixedBtn.className = 'py-1.5 text-xs font-bold rounded-lg border border-yumara-600 bg-yumara-50 text-yumara-700';
+                    percentBtn.className = 'py-1.5 text-xs font-bold rounded-lg border border-cream-300 bg-cream-100 text-forest-800';
                 }
+            }
+
+            async updateAdminFees() {
+                this.sessionData.deliveryFee = parseFloat(document.getElementById('admin-input-delivery').value) || 0;
+                this.sessionData.serviceFee = parseFloat(document.getElementById('admin-input-tax').value) || 0;
+                this.sessionData.splitMethod = document.getElementById('admin-select-split').value;
+                this.saveSessionToLocalArchive(true);
+                await this.saveSessionDataToFirestore();
+                this.renderOrdersStream();
             }
 
             async toggleLockSession() {
                 this.sessionData.isLocked = !this.sessionData.isLocked;
-                await this.saveSessionData();
-                this.showToast(this.sessionData.isLocked ? 'Orders locked for guests' : 'Orders unlocked', 'info');
+                this.saveSessionToLocalArchive(true);
+                await this.saveSessionDataToFirestore();
+                this.showToast(this.sessionData.isLocked ? 'Orders locked' : 'Orders unlocked', 'info');
             }
 
-            // -------------------------------------------------------------
-            // ADMIN FULL EDIT / OVERRIDE & MANUAL ORDER CREATION
-            // -------------------------------------------------------------
-            openAdminEditModal(participantId = null) {
-                const modal = document.getElementById('modal-admin-edit-order');
-                const titleEl = document.getElementById('admin-edit-title');
-                const idInput = document.getElementById('admin-edit-participant-id');
-                const nameInput = document.getElementById('admin-edit-name-input');
-                const noteInput = document.getElementById('admin-edit-note-input');
-                const container = document.getElementById('admin-edit-items-list');
-
-                container.innerHTML = '';
-
-                if (participantId) {
-                    const participant = (this.sessionData.participants || []).find(p => p.id === participantId);
-                    if (!participant) return;
-
-                    titleEl.innerText = `Edit ${participant.name}'s Order`;
-                    idInput.value = participant.id;
-                    nameInput.value = participant.name || '';
-                    noteInput.value = participant.note || '';
-
-                    (participant.items || []).forEach(item => {
-                        this.addAdminEditRow(item.name, item.price, item.qty);
-                    });
-                } else {
-                    titleEl.innerText = 'Add Colleague Order (Admin Override)';
-                    idInput.value = '';
-                    nameInput.value = '';
-                    noteInput.value = '';
-                    this.addAdminEditRow();
-                }
-
-                modal.classList.remove('hidden');
-                lucide.createIcons();
-            }
-
-            addAdminEditRow(name = '', price = '', qty = 1) {
-                const container = document.getElementById('admin-edit-items-list');
-                const rowId = 'admin_row_' + Math.random().toString(36).substring(2, 7);
-
-                const rowHtml = document.createElement('div');
-                rowHtml.id = rowId;
-                rowHtml.className = 'flex items-center space-x-2 bg-cream-50 p-2 rounded-xl border border-cream-300';
-                rowHtml.innerHTML = `
-                    <input type="text" placeholder="Item name" value="${this.escapeHtml(name)}" class="admin-edit-item-name flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-cream-300 bg-white font-medium text-forest-800">
-                    <input type="number" placeholder="Price" min="0" step="0.5" value="${price}" class="admin-edit-item-price w-20 text-xs px-2.5 py-1.5 rounded-lg border border-cream-300 bg-white font-bold text-forest-800">
-                    <div class="flex items-center space-x-1">
-                        <span class="text-[10px] text-slate-400 font-bold">x</span>
-                        <input type="number" min="1" value="${qty}" class="admin-edit-item-qty w-12 text-xs px-2 py-1.5 rounded-lg border border-cream-300 bg-white text-center font-bold text-forest-800">
-                    </div>
-                    <button type="button" onclick="app.removeAdminEditRow('${rowId}')" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                `;
-                container.appendChild(rowHtml);
-                lucide.createIcons();
-            }
-
-            removeAdminEditRow(rowId) {
-                const el = document.getElementById(rowId);
-                if (el) el.remove();
-            }
-
-            async saveAdminOrderEdit() {
-                const pId = document.getElementById('admin-edit-participant-id').value;
-                const name = document.getElementById('admin-edit-name-input').value.trim();
-                const note = document.getElementById('admin-edit-note-input').value.trim();
-
-                if (!name) {
-                    this.showToast('Colleague name is required', 'error');
-                    return;
-                }
-
-                const rows = document.querySelectorAll('#admin-edit-items-list > div');
-                const items = [];
-
-                rows.forEach(row => {
-                    const itemName = row.querySelector('.admin-edit-item-name').value.trim();
-                    const itemPrice = parseFloat(row.querySelector('.admin-edit-item-price').value) || 0;
-                    const itemQty = parseInt(row.querySelector('.admin-edit-item-qty').value) || 1;
-
-                    if (itemName && itemPrice >= 0) {
-                        items.push({ name: itemName, price: itemPrice, qty: itemQty });
-                    }
-                });
-
-                if (items.length === 0) {
-                    this.showToast('Please add at least one valid item and price', 'error');
-                    return;
-                }
-
-                const participants = [...(this.sessionData.participants || [])];
-
-                if (pId) {
-                    const targetIdx = participants.findIndex(p => p.id === pId);
-                    if (targetIdx >= 0) {
-                        participants[targetIdx].name = name;
-                        participants[targetIdx].items = items;
-                        participants[targetIdx].note = note;
-                    }
-                } else {
-                    participants.push({
-                        id: 'part_' + Date.now().toString(36),
-                        token: 'tok_' + Math.random().toString(36).substring(2, 9),
-                        name: name,
-                        items: items,
-                        note: note,
-                        isPaid: false
-                    });
-                }
-
-                this.sessionData.participants = participants;
-                await this.saveSessionData();
-
-                this.closeModal('modal-admin-edit-order');
-                this.showToast('Order saved and recalculated successfully!', 'success');
-            }
-
-            // -------------------------------------------------------------
-            // PRESETS, HISTORICAL ARCHIVE & SESSION DELETION
-            // -------------------------------------------------------------
             showCreateSessionModal() {
                 document.getElementById('modal-create-session').classList.remove('hidden');
                 lucide.createIcons();
@@ -1499,7 +1637,8 @@
                 });
 
                 this.sessionData.presets = newPresets;
-                await this.saveSessionData();
+                this.saveSessionToLocalArchive(true);
+                await this.saveSessionDataToFirestore();
                 this.closeModal('modal-admin-menu');
                 this.showToast('Presets saved!', 'success');
             }
@@ -1507,7 +1646,8 @@
             async clearPresets() {
                 this.sessionData.presets = [];
                 document.getElementById('quick-preset-paste').value = '';
-                await this.saveSessionData();
+                this.saveSessionToLocalArchive(true);
+                await this.saveSessionDataToFirestore();
                 this.closeModal('modal-admin-menu');
             }
 
@@ -1518,18 +1658,18 @@
 
             renderHistoryList() {
                 const container = document.getElementById('history-sessions-list');
-                
                 let history = [];
                 try {
                     history = JSON.parse(localStorage.getItem('food_sessions_archive') || '[]');
                 } catch (e) {}
 
                 if (history.length === 0) {
-                    container.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">No past order sessions found in history.</p>`;
+                    container.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">No past sessions found in history.</p>`;
                     return;
                 }
 
                 container.innerHTML = history.map(item => {
+                    const code = item.sessionCode || item.id;
                     const parts = item.participants || [];
                     const totalSub = parts.reduce((s, p) => s + (p.items || []).reduce((iS, i) => iS + (i.price * i.qty), 0), 0);
                     const grandTotal = totalSub + (item.deliveryFee || 0) + (item.serviceFee || 0);
@@ -1537,15 +1677,18 @@
                     return `
                         <div class="flex items-center justify-between p-3.5 bg-cream-50 hover:bg-cream-100 rounded-xl border border-cream-300">
                             <div>
-                                <h4 class="font-bold text-sm text-forest-800">${this.escapeHtml(item.restaurantName)}</h4>
-                                <p class="text-xs text-slate-500">${new Date(item.createdAt).toLocaleDateString('en-GB')} • Admin: ${this.escapeHtml(item.adminName)}</p>
-                                <p class="text-[11px] font-bold text-yumara-700 mt-0.5">${grandTotal.toFixed(2)} EGP (${parts.length} Participants) • Split: ${item.splitMethod || 'equal'}</p>
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-bold text-sm text-forest-800">${this.escapeHtml(item.restaurantName)}</h4>
+                                    <span class="code-font text-[11px] font-bold px-1.5 py-0.5 rounded bg-yumara-100 text-yumara-800 border border-yumara-200">${code}</span>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-0.5">${new Date(item.createdAt).toLocaleDateString('en-GB')} • Organizer: ${this.escapeHtml(item.adminName)}</p>
+                                <p class="text-[11px] font-bold text-yumara-700 mt-0.5">${grandTotal.toFixed(2)} EGP (${parts.length} Participants)</p>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button onclick="app.loadHistoricalSession('${item.id}')" class="px-3 py-1.5 bg-yumara-600 hover:bg-yumara-700 text-white text-xs font-bold rounded-lg shadow-sm">
+                                <button onclick="app.loadHistoricalSession('${code}')" class="px-3 py-1.5 bg-yumara-600 hover:bg-yumara-700 text-white text-xs font-bold rounded-lg shadow-sm">
                                     Open
                                 </button>
-                                <button onclick="app.deleteHistoricalSession('${item.id}')" class="p-1.5 text-rose-600 hover:bg-rose-100 rounded-lg transition-colors" title="Delete Session">
+                                <button onclick="app.promptDeleteHistoricalSession('${code}')" class="p-1.5 text-rose-600 hover:bg-rose-100 rounded-lg transition-colors" title="Delete Session">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -1556,105 +1699,79 @@
                 lucide.createIcons();
             }
 
-            async deleteHistoricalSession(id) {
-                if (!confirm('Are you sure you want to delete this old session from history?')) return;
-
-                let history = [];
-                try {
-                    history = JSON.parse(localStorage.getItem('food_sessions_archive') || '[]');
-                } catch (e) {}
-
-                history = history.filter(item => item.id !== id);
-                localStorage.setItem('food_sessions_archive', JSON.stringify(history));
-                localStorage.removeItem(`food_session_${id}`);
-
-                if (window.firebaseStore && window.firebaseStore.db) {
+            promptDeleteHistoricalSession(code) {
+                this.showConfirmDialog(`Delete Session ${code}?`, `This will remove the session from your history archive.`, async () => {
+                    let history = [];
                     try {
-                        const { db, appId, doc, deleteDoc } = window.firebaseStore;
-                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'food_sessions', id);
-                        await deleteDoc(docRef);
+                        history = JSON.parse(localStorage.getItem('food_sessions_archive') || '[]');
                     } catch (e) {}
-                }
 
-                this.showToast('Session deleted', 'info');
-                this.renderHistoryList();
-            }
+                    history = history.filter(item => (item.sessionCode || item.id) !== code);
+                    localStorage.setItem('food_sessions_archive', JSON.stringify(history));
+                    localStorage.removeItem(`food_session_${code}`);
 
-            async clearAllHistory() {
-                if (!confirm('Are you sure you want to clear ALL past order history? This cannot be undone.')) return;
-
-                let history = [];
-                try {
-                    history = JSON.parse(localStorage.getItem('food_sessions_archive') || '[]');
-                } catch (e) {}
-
-                history.forEach(item => {
-                    localStorage.removeItem(`food_session_${item.id}`);
+                    this.showToast('Session deleted from history', 'info');
+                    this.renderHistoryList();
                 });
-
-                localStorage.removeItem('food_sessions_archive');
-                this.showToast('All past session history cleared', 'info');
-                this.renderHistoryList();
             }
 
-            loadHistoricalSession(id) {
+            promptClearAllHistory() {
+                this.showConfirmDialog('Clear All History?', 'Are you sure you want to clear ALL past session history? This cannot be undone.', async () => {
+                    let history = [];
+                    try {
+                        history = JSON.parse(localStorage.getItem('food_sessions_archive') || '[]');
+                    } catch (e) {}
+
+                    history.forEach(item => {
+                        localStorage.removeItem(`food_session_${item.sessionCode || item.id}`);
+                    });
+
+                    localStorage.removeItem('food_sessions_archive');
+                    this.showToast('History cleared', 'info');
+                    this.renderHistoryList();
+                });
+            }
+
+            loadHistoricalSession(code) {
                 this.closeModal('modal-history');
-                this.sessionId = id;
-                this.loadSessionState(id);
-                this.updateURLHash('admin');
+                window.location.hash = `#session=${code}`;
             }
 
-            // -------------------------------------------------------------
-            // SHARING & UTILS
-            // -------------------------------------------------------------
+            showConfirmDialog(title, message, onConfirm) {
+                const modal = document.getElementById('modal-custom-confirm');
+                document.getElementById('custom-confirm-title').innerText = title;
+                document.getElementById('custom-confirm-message').innerText = message;
+
+                const acceptBtn = document.getElementById('custom-confirm-accept-btn');
+                const cancelBtn = document.getElementById('custom-confirm-cancel-btn');
+
+                const cleanup = () => {
+                    modal.classList.add('hidden');
+                    acceptBtn.onclick = null;
+                    cancelBtn.onclick = null;
+                };
+
+                acceptBtn.onclick = () => {
+                    cleanup();
+                    if (typeof onConfirm === 'function') onConfirm();
+                };
+
+                cancelBtn.onclick = cleanup;
+                modal.classList.remove('hidden');
+                lucide.createIcons();
+            }
+
             fallbackCopyText(text) {
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        this.showToast('Copied to clipboard!', 'success');
-                    }).catch(() => this.execCopyCommand(text));
-                } else {
-                    this.execCopyCommand(text);
-                }
-            }
-
-            execCopyCommand(text) {
                 const textArea = document.createElement("textarea");
                 textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
                 document.body.appendChild(textArea);
                 textArea.select();
                 try {
                     document.execCommand('copy');
-                    this.showToast('Copied to clipboard!', 'success');
-                } catch (err) {
-                    this.showToast('Could not copy automatically', 'error');
-                }
+                } catch (err) {}
                 document.body.removeChild(textArea);
-            }
-
-            copyWhatsAppSummary() {
-                const breakdown = this.computeBreakdowns();
-                const restName = this.sessionData.restaurantName || 'Food Order';
-
-                let text = `🍱 *yumara* — *What Are We Going to Eat?*\n`;
-                text += `📍 *Restaurant:* ${restName}\n`;
-                text += `⚙️ *Split Method:* ${this.sessionData.splitMethod === 'proportional' ? 'Proportional by Subtotal' : 'Equal Split'}\n\n`;
-
-                breakdown.participants.forEach(p => {
-                    text += `👤 *${p.name}* [${p.isPaid ? 'PAID ✓' : 'UNPAID'}]\n`;
-                    p.items.forEach(i => {
-                        text += `  • ${i.qty}x ${i.name} (${(i.price * i.qty).toFixed(2)} EGP)\n`;
-                    });
-                    if (p.note) text += `  📝 Note: ${p.note}\n`;
-                    text += `  💰 *Total:* ${p.grandTotal.toFixed(2)} EGP (Sub: ${p.subtotal.toFixed(2)} | Deliv: ${p.deliveryShare.toFixed(2)} | Tax: ${p.taxShare.toFixed(2)})\n\n`;
-                });
-
-                text += `-----------------------------------\n`;
-                text += `📦 *Items Subtotal:* ${breakdown.groupSubtotal.toFixed(2)} EGP\n`;
-                text += `🚗 *Delivery Fee:* ${breakdown.deliveryTotal.toFixed(2)} EGP\n`;
-                text += `🧾 *Tax/Service:* ${breakdown.totalTaxEgp.toFixed(2)} EGP\n`;
-                text += `💵 *Grand Total Bill:* ${breakdown.grandTotalBill.toFixed(2)} EGP\n`;
-
-                this.fallbackCopyText(text);
             }
 
             openMenuImageModal() {
@@ -1682,17 +1799,8 @@
                 setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
                 setTimeout(() => {
                     toast.classList.add('opacity-0', 'translate-y-2');
-                    setTimeout(() => toast.remove(), 200);
+                    setTimeout(() => toast.remove(), 250);
                 }, 3000);
-            }
-
-            readFileAsBase64(file) {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = error => reject(error);
-                    reader.readAsDataURL(file);
-                });
             }
 
             escapeHtml(str) {
